@@ -213,7 +213,7 @@ cp -r ai-tools/skills/trustpin-integration .agents/skills/</code></pre></div>
 <div class="codeblock"><pre><code>brew tap trustpin-cloud/trustpin-cli
 brew trust trustpin-cloud/trustpin-cli   # one-time, required on Homebrew 6.0+
 brew install trustpin-cli</code></pre></div>
-<p>Authenticate with a personal access token you create at <a href="https://app.trustpin.cloud/account/access-tokens">app.trustpin.cloud</a>, either by running <code>trustpin-cli configure</code> yourself or by setting <code>TRUSTPIN_API_TOKEN</code> in your shell or CI secret store.</p>
+<p>Authenticate with a personal access token you create at <a href="https://app.trustpin.cloud/account/access-tokens">app.trustpin.cloud</a>, by running <code>trustpin-cli configure</code> yourself and entering it at the prompt. For CI, supply it from your CI secret store as described in the <a href="https://docs.trustpin.cloud/cli/devops-guide">DevOps guide</a>. The agent never asks for the token, the master password, or a private key.</p>
 <p>The safe rotation order is: publish the new pin first, deploy the new certificate second. Keep the old and new pins active together during the overlap, and add the new pin well before the old certificate is replaced, because an app picks up a new configuration only when it is next opened. Many certificate providers generate a new key pair at renewal, which changes the SPKI pin.</p>
 <p>Command reference and automation guide: <a href="https://docs.trustpin.cloud/cli/overview">docs.trustpin.cloud/cli</a>.</p>
 </section>

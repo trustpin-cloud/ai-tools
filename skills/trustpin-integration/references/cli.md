@@ -17,7 +17,7 @@ Source: https://docs.trustpin.cloud/cli/overview, /cli/commands, /cli/devops-gui
 ## 1. Safety rules
 
 - **`projects sign` publishes to every installed app.** Do not run it without the user's explicit go-ahead in this conversation. Offer `--dry-run` first.
-- **Secrets stay out of the chat and the repository.** The API token (`tp_...`), the master password, and a bring-your-own-key private key are secrets. Do not ask the user to paste them. Have them export environment variables in their own shell or store them as CI secrets, and write commands that reference the variable (`"$MASTER_PASSWORD"`), never the value.
+- **Secrets stay out of the chat and the repository.** The API token (`tp_...`), the master password, and a bring-your-own-key private key are secrets. Do not ask the user to paste them, do not read them, and never put a secret value in a command, a file, or a message. The user enters them at the CLI's own prompt, or supplies them from their CI secret store as TrustPin's DevOps guide describes (https://docs.trustpin.cloud/cli/devops-guide).
 - **Staging commands are safe to preview.** `upsert`, `cleanup`, and `refresh-certs` accept `--dry-run`. Use it before the real run when working on a production project.
 - **Read commands are safe.** `user info`, `projects list`, `projects get`, `projects config`, `projects jws`, `domains certificates` change nothing.
 
@@ -41,12 +41,7 @@ chmod +x trustpin-cli && sudo mv trustpin-cli /usr/local/bin/
 
 When the CLI moves to a newer release, change both the version in the URL and the digest.
 
-Authentication uses a Personal Access Token the user creates at https://app.trustpin.cloud/account/access-tokens. Either the user runs `trustpin-cli configure` interactively, or the environment provides:
-
-```bash
-export TRUSTPIN_API_TOKEN=...          # set by the user or the CI secret store
-export TRUSTPIN_API_BASE_URL=https://api.trustpin.cloud   # optional
-```
+Authentication uses a Personal Access Token the user creates at https://app.trustpin.cloud/account/access-tokens. The user runs `trustpin-cli configure` themselves and enters the token at the prompt. For CI, the user supplies the token from their CI secret store. Read TrustPin's DevOps guide (https://docs.trustpin.cloud/cli/devops-guide) for the current variable names and setup, and do not write token values anywhere.
 
 Find the IDs:
 
@@ -72,7 +67,7 @@ trustpin-cli projects list --output json | jq -r '.data.projects[] | "\(.organiz
 | `projects refresh-certs <org> <project> --domain <fqdn> [--remove-expired]` | Pins every certificate TrustPin can see for that host as SPKI SHA-256. Adds the domain if missing. Never discards existing pins. Writes nothing if the lookup fails |
 | `projects upsert <org> <project> --domain <d> --pin <type>:<value> [--expires <ISO8601>]` | Add or update one pin by hand. Types: `spki-sha256`, `spki-sha512`, `sha256`, `sha512` |
 | `projects cleanup <org> <project>` | Remove already-expired pins across the whole project |
-| `projects sign <org> <project> [--private-key <pem>] [--password <pw>] [--dry-run]` | Sign and publish |
+| `projects sign <org> <project> [--dry-run]` | Sign and publish. Key options: see `projects sign --help` |
 | `projects jws <org> <project> [--verify] [--decode] [--output-file <path>]` | Fetch the published signed configuration from the CDN |
 
 Most commands accept `--output json`.
@@ -84,19 +79,16 @@ Use `refresh-certs` when the certificate is live or visible in Certificate Trans
 The safe order is: new pin published first, new certificate deployed second.
 
 ```bash
-# 1. Rehearse signing so a bad key or password fails before anything is staged
-trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --password "$MASTER_PASSWORD" --dry-run
-
-# 2. Stage: pick up the new certificate (already issued and in CT, or already live)
+# 1. Stage: pick up the new certificate (already issued and in CT, or already live)
 trustpin-cli projects refresh-certs "$ORG_ID" "$PROJECT_ID" \
   --domain api.example.com --remove-expired --output json
 
-# 3. Publish (only with the user's go-ahead)
-trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --password "$MASTER_PASSWORD"
-
-# 4. Confirm what is live
-trustpin-cli projects jws "$ORG_ID" "$PROJECT_ID" --verify
+# 2. Review what changed: Configuration Version now differs from Published Version
+trustpin-cli projects get "$ORG_ID" "$PROJECT_ID"
 ```
+
+3. **Publish is the user's step.** Offer `trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --dry-run` first, which fails on a bad key or password before anything goes live, then the same command without `--dry-run`. The CLI asks for the master password at its own prompt. Run it only with the user's go-ahead, and never put the password in a command.
+4. **Confirm what is live:** `trustpin-cli projects jws "$ORG_ID" "$PROJECT_ID" --verify`.
 
 Then the user deploys the new certificate to the servers. Keep the old and new pins active together during the overlap. The documentation recommends adding the new pin 7 to 14 days before the old certificate is replaced, because an app only picks up a new configuration when it is next opened. If the renewal reuses the same key pair, the SPKI pin does not change and only the expiry needs updating.
 
@@ -106,53 +98,29 @@ If signing fails, the previously published configuration stays active.
 
 For projects of type "Bring Your Own Keys", the private key never leaves the user's side and publishing from the web dashboard may be disabled, so the CLI is how configurations get published.
 
-```bash
-trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --private-key "$PRIVATE_KEY_FILE" --dry-run
-trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --private-key "$PRIVATE_KEY_FILE"
-```
+The user runs `trustpin-cli projects sign` with the `--private-key` option pointing at their PEM file, first with `--dry-run`, then without it. The key must be PEM. If it is password-protected, the CLI prompts. `--dry-run` validates the key against the project's public key: a wrong key fails with `INVALID_KEY_PAIR`, a wrong password with `INCORRECT_PASSWORD`. Run `trustpin-cli projects sign --help` for the exact options on the installed version.
 
-The key must be PEM. If it is password-protected, the CLI prompts, or takes `--password`. `--dry-run` validates the key against the project's public key: a wrong key fails with `INVALID_KEY_PAIR`, a wrong password with `INCORRECT_PASSWORD`.
-
-Do not read, print, copy, or commit the key file. In CI, write it from the secret store to a temporary file with restricted permissions and delete it at the end of the job.
+Do not read, print, copy, or commit the key file. In CI, the user writes it from their secret store to a temporary file with restricted permissions and deletes it at the end of the job.
 
 ## 7. CI pipelines
 
-A scheduled GitHub Actions job that refreshes one host daily and publishes only when something changed. Adapt hosts and secret names to the user's setup:
+A scheduled job can refresh pins and publish only when something changed. TrustPin's DevOps guide (https://docs.trustpin.cloud/cli/devops-guide) has the current CI examples, including how to supply the API token and the signing credentials from the CI secret store. Follow it for that part, and do not write secret names or values into a pipeline file yourself.
 
-```yaml
-name: Refresh certificate pins
-on:
-  schedule:
-    - cron: "0 5 * * *"
-  workflow_dispatch:
-jobs:
-  refresh:
-    runs-on: ubuntu-latest
-    env:
-      TRUSTPIN_API_TOKEN: ${{ secrets.TRUSTPIN_API_TOKEN }}
-      ORG_ID: ${{ vars.TRUSTPIN_ORG_ID }}
-      PROJECT_ID: ${{ vars.TRUSTPIN_PROJECT_ID }}
-      MASTER_PASSWORD: ${{ secrets.TRUSTPIN_MASTER_PASSWORD }}
-    steps:
-      - name: Install TrustPin CLI
-        run: |
-          curl -fL https://github.com/trustpin-cloud/homebrew-trustpin/releases/download/v6.0.0/trustpin-cli-linux-x64 -o trustpin-cli
-          echo "5bb889bc6ae131d2caef0fb6ec59f97aab95a5f400bc7ecb902494f522afce83  trustpin-cli" | sha256sum -c -
-          chmod +x trustpin-cli && sudo mv trustpin-cli /usr/local/bin/
-      - name: Preflight signing credentials
-        run: trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --password "$MASTER_PASSWORD" --dry-run > /dev/null
-      - name: Refresh and publish if changed
-        run: |
-          set -euo pipefail
-          BEFORE=$(trustpin-cli projects get "$ORG_ID" "$PROJECT_ID" --output json | jq -r '.data.project.config_version')
-          trustpin-cli projects refresh-certs "$ORG_ID" "$PROJECT_ID" --domain api.example.com --remove-expired --output json
-          AFTER=$(trustpin-cli projects get "$ORG_ID" "$PROJECT_ID" --output json | jq -r '.data.project.config_version')
-          if [ "$BEFORE" = "$AFTER" ]; then echo "No pin changes."; exit 0; fi
-          trustpin-cli projects sign "$ORG_ID" "$PROJECT_ID" --password "$MASTER_PASSWORD"
-          trustpin-cli projects jws "$ORG_ID" "$PROJECT_ID" --verify
-```
+The job, in order:
 
-For a bring-your-own-key project, replace `--password "$MASTER_PASSWORD"` with `--private-key "$PRIVATE_KEY_FILE"`.
+1. Install the CLI pinned to a version, as in section 2, including the digest check.
+2. Authenticate and rehearse signing with `--dry-run`, so bad credentials fail before anything is staged.
+3. Refresh the pins and detect whether anything changed:
+
+   ```bash
+   set -euo pipefail
+   BEFORE=$(trustpin-cli projects get "$ORG_ID" "$PROJECT_ID" --output json | jq -r '.data.project.config_version')
+   trustpin-cli projects refresh-certs "$ORG_ID" "$PROJECT_ID" --domain api.example.com --remove-expired --output json
+   AFTER=$(trustpin-cli projects get "$ORG_ID" "$PROJECT_ID" --output json | jq -r '.data.project.config_version')
+   if [ "$BEFORE" = "$AFTER" ]; then echo "No pin changes."; exit 0; fi
+   ```
+
+4. Only when something changed: sign, then confirm with `trustpin-cli projects jws "$ORG_ID" "$PROJECT_ID" --verify`.
 
 To refresh every host in the project, read the list from the stored configuration:
 
