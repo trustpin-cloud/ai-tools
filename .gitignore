@@ -1,0 +1,7 @@
+dist/
+__pycache__/
+.DS_Store
+tests/
+tools/
+.claude/
+RELEASING.md

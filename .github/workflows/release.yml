@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that the tag matches the declared versions
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, sys
+          ref = os.environ["REF_NAME"]
+          if not ref.startswith("v"):
+              sys.exit(f"Not a release tag: {ref}")
+          version = ref[1:]
+          plugin = json.load(open(".claude-plugin/plugin.json"))["version"]
+          skill = re.search(r'skill-version:\s*"([^"]+)"', open("skills/trustpin-integration/SKILL.md").read()).group(1)
+          changelog = f"## {version}" in open("CHANGELOG.md").read()
+          problems = []
+          if plugin != version: problems.append(f"plugin.json is {plugin}")
+          if skill != version: problems.append(f"SKILL.md skill-version is {skill}")
+          if not changelog: problems.append("CHANGELOG.md has no section for it")
+          if problems:
+              sys.exit(f"Tag {ref} does not match: " + "; ".join(problems))
+          PY
+
+      - name: Validate manifests
+        run: |
+          python3 -c "import json; [json.load(open(f)) for f in ('.claude-plugin/plugin.json', '.claude-plugin/marketplace.json')]"
+
+      - name: Build archives
+        run: |
+          mkdir dist
+          cd skills
+          zip -qr ../dist/trustpin-integration.skill trustpin-integration -x "*/__pycache__/*"
+          zip -qr ../dist/trustpin-integration.zip trustpin-integration -x "*/__pycache__/*"
+          cd ..
+          unzip -l dist/trustpin-integration.skill | tail -1
+
+      - name: Extract release notes
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          version="${REF_NAME#v}"
+          awk -v h="## $version" '$0 == h {on=1; next} /^## / {on=0} on' CHANGELOG.md > notes.md
+          test -s notes.md
+
+      - name: Create the GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          gh release create "$REF_NAME" \
+            dist/trustpin-integration.skill dist/trustpin-integration.zip \
+            --title "$REF_NAME" --notes-file notes.md --verify-tag
+
+      - name: Keep the archives from a manual run
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trustpin-integration
+          path: dist/
