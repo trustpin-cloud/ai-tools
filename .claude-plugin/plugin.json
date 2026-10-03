@@ -9,6 +9,10 @@
     "url": "https://trustpin.cloud"
   },
   "homepage": "https://docs.trustpin.cloud",
+  "privacyPolicyUrl": "https://trustpin.cloud/privacy",
+  "documentationUrl": "https://docs.trustpin.cloud",
+  "supportUrl": "https://trustpin.cloud/contact",
+  "termsOfServiceUrl": "https://trustpin.cloud/terms",
   "repository": "https://github.com/trustpin-cloud/ai-tools",
   "license": "SEE LICENSE IN LICENSE",
   "keywords": [
