@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustPin AI tools</title>
+<meta name="description" content="An Agent Skill that teaches AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps.">
+<style>
+:root {
+  --bg: #ffffff; --fg: #1b1f24; --muted: #59636e; --line: #d8dee4;
+  --accent: #0b5fff; --accent-fg: #ffffff; --code-bg: #f4f6f8; --card: #f8fafc; --warn: #8a5a00; --warn-bg: #fff6df;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1418; --fg: #e6eaee; --muted: #9aa5b1; --line: #29323b;
+    --accent: #6ea0ff; --accent-fg: #0f1418; --code-bg: #171e25; --card: #141b21; --warn: #f0c36a; --warn-bg: #2a2111;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1418; --fg: #e6eaee; --muted: #9aa5b1; --line: #29323b;
+  --accent: #6ea0ff; --accent-fg: #0f1418; --code-bg: #171e25; --card: #141b21; --warn: #f0c36a; --warn-bg: #2a2111;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--accent); }
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+header.top { border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 10px; padding-bottom: 10px; }
+header.top strong { font-size: 15px; }
+nav { display: flex; gap: 14px; flex-wrap: wrap; font-size: 14px; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--fg); }
+.hero { padding: 48px 0 24px; }
+.hero h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 0 0 12px; }
+.hero p.lead { font-size: 18px; color: var(--muted); margin: 0 0 20px; max-width: 680px; }
+.prompts { display: grid; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.prompts li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+section { padding: 28px 0; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; }
+h2 { font-size: 24px; margin: 0 0 12px; }
+h3 { font-size: 17px; margin: 22px 0 8px; }
+p, ul, ol { margin: 0 0 12px; }
+ul, ol { padding-left: 22px; }
+li { margin: 4px 0; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.codeblock { position: relative; margin: 8px 0 16px; }
+pre { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.5; }
+pre code { background: none; padding: 0; font-size: inherit; }
+button.copy { position: absolute; top: 8px; right: 8px; font: 12px system-ui; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; cursor: pointer; }
+button.copy:hover { color: var(--fg); }
+table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .03em; }
+.tablewrap { overflow-x: auto; }
+.note { background: var(--warn-bg); color: var(--warn); border-radius: 8px; padding: 10px 14px; margin: 12px 0; font-size: 15px; }
+.cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 12px 0; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.card h3 { margin-top: 0; }
+footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--muted); font-size: 14px; }
+.btn { display: inline-block; background: var(--accent); color: var(--accent-fg); text-decoration: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; font-size: 15px; }
+.btn.alt { background: transparent; color: var(--accent); border: 1px solid var(--line); }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 640px) { nav { display: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <strong>TrustPin AI tools</strong>
+    <nav>
+      <a href="#install">Install</a>
+      <a href="#use">Use</a>
+      <a href="#platforms">Platforms</a>
+      <a href="#safety">Safety</a>
+      <a href="#rotation">Rotation</a>
+      <a href="#update">Update</a>
+      <a href="#help">Help</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="hero">
+  <h1>Add TrustPin certificate pinning with your AI coding agent</h1>
+  <p class="lead">An Agent Skill that teaches AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps (bare and Expo).</p>
+  <div class="cta">
+    <a class="btn" href="#install">Install it</a>
+    <a class="btn alt" href="https://github.com/trustpin-cloud/ai-tools">GitHub repository</a>
+  </div>
+  <p style="margin-top:22px;margin-bottom:6px;color:var(--muted)">Once installed, ask your agent:</p>
+  <ul class="prompts">
+    <li>Integrate TrustPin into this app.</li>
+    <li>Review our TrustPin integration before release.</li>
+    <li>Set up a pin rotation job.</li>
+    <li>Requests fail with PINS_MISMATCH, what do I do?</li>
+  </ul>
+</div>
+
+<section id="install">
+  <h2>Install</h2>
+
+  <h3>Claude Code</h3>
+  <p>Run these in a Claude Code session in your app project:</p>
+  <div class="codeblock"><pre><code>/plugin marketplace add trustpin-cloud/ai-tools
+/plugin install trustpin@trustpin</code></pre></div>
+  <p>The same from a terminal:</p>
+  <div class="codeblock"><pre><code>claude plugin marketplace add trustpin-cloud/ai-tools
+claude plugin install trustpin@trustpin</code></pre></div>
+
+  <h3>Claude (web and desktop)</h3>
+  <p>Download <code>trustpin-integration.skill</code> from the <a href="https://github.com/trustpin-cloud/ai-tools/releases/latest">latest release</a> and add it under <strong>Settings, Capabilities, Skills</strong>.</p>
+
+  <h3>Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills</h3>
+  <p>Copy the skill folder into your project:</p>
+  <div class="codeblock"><pre><code>git clone https://github.com/trustpin-cloud/ai-tools
+mkdir -p .agents/skills
+cp -r ai-tools/skills/trustpin-integration .agents/skills/</code></pre></div>
+  <p><code>.agents/skills/</code> is the shared project location these agents read. Agent-specific locations also work: <code>.claude/skills/</code>, <code>.cursor/skills/</code>, <code>.github/skills/</code>. Check your agent's documentation if the skill is not picked up.</p>
+
+  <h3>Agents without skills support</h3>
+  <p>Keep the folder in your repository and add this line to <code>AGENTS.md</code>:</p>
+  <div class="codeblock"><pre><code>When working with TrustPin or certificate pinning, read `.agents/skills/trustpin-integration/SKILL.md` first.</code></pre></div>
+
+  <h3>Check that it is active (Claude Code)</h3>
+  <ul>
+    <li>Run <code>claude plugin list</code>. <code>trustpin@trustpin</code> should show as enabled. Inside a session, <code>/plugin</code> shows the same under Installed.</li>
+    <li><code>claude plugin details trustpin</code> lists the skill it provides.</li>
+    <li>Type <code>/trustpin:trustpin-integration</code> to run it directly. Claude also loads it by itself when you mention TrustPin or certificate pinning.</li>
+    <li>When it is used, the transcript shows a <code>Skill(trustpin:trustpin-integration)</code> call, and the agent reads the reference file for your platform.</li>
+  </ul>
+
+  <h3>Share it with your whole team (Claude Code)</h3>
+  <p>Commit this to your app's <code>.claude/settings.json</code>:</p>
+  <div class="codeblock"><pre><code>{
+  "extraKnownMarketplaces": {
+    "trustpin": {
+      "source": { "source": "github", "repo": "trustpin-cloud/ai-tools" }
+    }
+  },
+  "enabledPlugins": { "trustpin@trustpin": true }
+}</code></pre></div>
+  <p>Claude Code reads these entries only after each teammate accepts the trust prompt for the folder. Enabling the plugin still installs it from the marketplace the first time.</p>
+</section>
+
+<section id="use">
+<h2>Use it</h2>
+<p>The agent follows the same workflow on every platform:</p>
+<ol>
+  <li><strong>Detects the platform</strong> and the HTTP client your app already uses (URLSession, Alamofire, OkHttp, Retrofit, Ktor, Dio, <code>package:http</code>, <code>fetch</code>).</li>
+  <li><strong>Checks the minimum requirements</strong> and stops to ask instead of raising deployment targets or toolchain versions.</li>
+  <li><strong>Lists the hosts</strong> your code connects to, so you can confirm each one is registered in your TrustPin project. In strict mode an unregistered host is refused.</li>
+  <li><strong>Adds the SDK, the config file, the setup call</strong>, and wires pinning into your existing client. It does not add a second networking library.</li>
+  <li><strong>Verifies</strong> with you: a request to a registered host should succeed, and one to an unregistered host should fail.</li>
+  <li><strong>Reports</strong> the files changed, the host list, and the steps still open.</li>
+</ol>
+
+<h3>What you do and what the agent does</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>The agent, in your codebase</th><th>You, in the dashboard or the CLI</th></tr></thead>
+<tbody>
+<tr><td>Detects the platform and HTTP client</td><td>Creates the account and the project</td></tr>
+<tr><td>Adds the SDK dependency</td><td>Chooses key management</td></tr>
+<tr><td>Creates the config file with the three project values</td><td>Adds domains and their pins</td></tr>
+<tr><td>Adds the setup code and the readiness gate</td><td>Publishes (signs) the configuration</td></tr>
+<tr><td>Wires pinning into the HTTP client</td><td>Copies Organization ID, Project ID, and Public Key</td></tr>
+<tr><td>Inventories the hosts the app calls</td><td>Holds the master password, private key, and API token</td></tr>
+</tbody></table></div>
+
+<h3>Before you start</h3>
+<p>Have a TrustPin project ready, or let the agent walk you through it. Sign in at <a href="https://app.trustpin.cloud">app.trustpin.cloud</a>, create a project, choose key management, add your domains and pins, then apply changes and <strong>publish</strong>. Applying changes only saves them. Nothing reaches devices until you publish, and a missing publish is the most common reason a new integration reports <code>domainNotRegistered</code>. The full guide is at <a href="https://docs.trustpin.cloud/getting-started/setup">docs.trustpin.cloud</a>.</p>
+<p>Give the agent your Organization ID, Project ID, and Public Key. These three values are not secrets. If you have not got them yet, the agent writes placeholders and tells you setup fails until they are replaced.</p>
+
+<h3>Other things you can ask</h3>
+<ul>
+  <li><strong>Review:</strong> "Review our TrustPin integration." The agent works through a checklist covering configuration, initialization, coverage of every HTTP client, and operations, and cites file and line for each finding. It does not change code unless you ask.</li>
+  <li><strong>Diagnose:</strong> paste an error such as <code>PINS_MISMATCH</code>, <code>DOMAIN_NOT_REGISTERED</code>, or <code>ALL_PINS_EXPIRED</code>. The agent explains the cause and the fix in your project.</li>
+  <li><strong>Automate:</strong> "Set up a pin rotation job" produces a CI pipeline using the TrustPin CLI.</li>
+</ul>
+</section>
+
+<section id="platforms">
+<h2>Platforms and requirements</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Platform</th><th>Requirements</th><th>HTTP clients covered</th></tr></thead>
+<tbody>
+<tr><td>Swift (iOS, macOS)</td><td>iOS 15+, macOS 13+, Swift 6.1+, Xcode 16.3+</td><td>URLSession, Alamofire, system-wide URL protocol</td></tr>
+<tr><td>Kotlin (Android)</td><td>Android API 25+, Kotlin 2.3.0+, Java 11+</td><td>OkHttp, Retrofit, Ktor (OkHttp engine), HttpsURLConnection</td></tr>
+<tr><td>Flutter</td><td>iOS 15+, Android API 25+, macOS 13+</td><td>Dio, <code>package:http</code></td></tr>
+<tr><td>React Native (bare and Expo)</td><td>React Native 0.85+ with the New Architecture, Node 22.11+, iOS 15+, Android API 25+</td><td>Plain <code>fetch</code>, pinned natively with no client wiring</td></tr>
+</tbody></table></div>
+<div class="note"><strong>Expo Go cannot run pinning</strong> because it is native code. Use a development build.</div>
+<p>If your project is below a minimum, the agent stops and tells you what would need to be raised. It does not upgrade your toolchain as a side effect.</p>
+<p>Out of scope for the skill: the REST API, self-hosted configuration URLs, FIDO-protected keys, and server-side JVM use. See <a href="https://docs.trustpin.cloud">docs.trustpin.cloud</a> or contact support.</p>
+</section>
+
+<section id="safety">
+<h2>What the skill will and will not do</h2>
+<div class="cards">
+  <div class="card"><h3>Secrets</h3><p>It never asks you to paste your API token, master password, or a private key, and never writes them to a file in your repository.</p></div>
+  <div class="card"><h3>Publishing</h3><p>Publishing a configuration makes it live for every installed app. The agent never runs <code>trustpin-cli projects sign</code> without your explicit go-ahead, and offers <code>--dry-run</code> first.</p></div>
+  <div class="card"><h3>Pinning stays on</h3><p>It keeps <code>strict</code> mode for anything that ships, never falls back to an unpinned client when setup fails, and never fixes a pinning error by weakening pinning.</p></div>
+  <div class="card"><h3>No hidden behavior</h3><p>The skill is instructions and reference text. It adds no MCP server, no hooks, and no background process.</p></div>
+</div>
+<p>The bundled script <code>scripts/find_hosts.py</code> runs only when you or the agent start it. It reads source and config files in your project and prints the hostnames it finds. It makes no network requests and writes no files. It sees only literal URLs, so the agent also checks hosts built at runtime or loaded from remote config.</p>
+<p>The agent describes what it did (which client is pinned, for which hosts, in which mode). It does not claim that your app meets any security standard.</p>
+</section>
+
+<section id="rotation">
+<h2>Pin rotation and the CLI</h2>
+<p>For rotation and CI the agent uses the TrustPin CLI. Install it with Homebrew:</p>
+<div class="codeblock"><pre><code>brew tap trustpin-cloud/trustpin-cli
+brew trust trustpin-cloud/trustpin-cli   # one-time, required on Homebrew 6.0+
+brew install trustpin-cli</code></pre></div>
+<p>Authenticate with a personal access token you create at <a href="https://app.trustpin.cloud/account/access-tokens">app.trustpin.cloud</a>, either by running <code>trustpin-cli configure</code> yourself or by setting <code>TRUSTPIN_API_TOKEN</code> in your shell or CI secret store.</p>
+<p>The safe rotation order is: publish the new pin first, deploy the new certificate second. Keep the old and new pins active together during the overlap, and add the new pin well before the old certificate is replaced, because an app picks up a new configuration only when it is next opened. Many certificate providers generate a new key pair at renewal, which changes the SPKI pin.</p>
+<p>Command reference and automation guide: <a href="https://docs.trustpin.cloud/cli/overview">docs.trustpin.cloud/cli</a>.</p>
+</section>
+
+<section id="update">
+<h2>Update, remove, and versions</h2>
+<h3>Update</h3>
+<div class="codeblock"><pre><code>claude plugin marketplace update trustpin
+claude plugin update trustpin@trustpin</code></pre></div>
+<p>Then run <code>/reload-plugins</code> in a running session. If you copied the skill folder, pull the repository again and copy it over.</p>
+<h3>Remove</h3>
+<div class="codeblock"><pre><code>claude plugin uninstall trustpin@trustpin
+claude plugin marketplace remove trustpin</code></pre></div>
+<h3>Verified against</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Component</th><th>Version</th></tr></thead>
+<tbody>
+<tr><td>TrustPinKit (Swift)</td><td>6.4.0</td></tr>
+<tr><td>kotlin-sdk (Android)</td><td>6.4.0</td></tr>
+<tr><td>trustpin_sdk (Flutter)</td><td>6.4.0</td></tr>
+<tr><td>@trustpin/react-native</td><td>6.4.0</td></tr>
+<tr><td>trustpin-cli</td><td>6.0.0</td></tr>
+</tbody></table></div>
+<p>If your installed SDK behaves differently from what the skill says, the SDK is the source of truth. The API references are the most current: <a href="https://trustpin-cloud.github.io/swift.sdk">Swift</a>, <a href="https://trustpin-cloud.github.io/kotlin.sdk">Kotlin</a>, <a href="https://trustpin-cloud.github.io/flutter.sdk">Flutter</a>, <a href="https://trustpin-cloud.github.io/react-native.sdk">React Native</a>. Tell your agent what differed, and tell us.</p>
+</section>
+
+<section id="help">
+<h2>Troubleshooting the skill itself</h2>
+<ul>
+  <li><strong>The agent does not use the skill.</strong> Mention TrustPin or certificate pinning in your request, or run <code>/trustpin:trustpin-integration</code>. Confirm the install with <code>claude plugin list</code>. For other agents, check that the folder sits in a location the agent reads, or add the <code>AGENTS.md</code> line.</li>
+  <li><strong>The plugin does not appear after install.</strong> Run <code>/reload-plugins</code> or start a new session.</li>
+  <li><strong>The marketplace cannot be added.</strong> Check your network and that you can reach <code>github.com</code>. For a team setup, the folder must be trusted first.</li>
+  <li><strong>The agent got something wrong.</strong> Open an issue with the agent and version you used, the SDK version, and what it did compared with what you expected. Do not paste secrets.</li>
+</ul>
+</section>
+
+<section>
+<h2>Support and licensing</h2>
+<ul>
+  <li>Technical help with TrustPin: <a href="mailto:support@trustpin.cloud">support@trustpin.cloud</a></li>
+  <li>Security reports, licensing, and everything else: <a href="mailto:contact@trustpin.cloud">contact@trustpin.cloud</a>. Please do not open a public issue for a vulnerability.</li>
+  <li>Mistakes and outdated instructions in the skill: <a href="https://github.com/trustpin-cloud/ai-tools/issues">GitHub issues</a>. This repository does not accept pull requests.</li>
+  <li>Documentation: <a href="https://docs.trustpin.cloud">docs.trustpin.cloud</a></li>
+</ul>
+<p>The skill is provided under the <a href="https://github.com/trustpin-cloud/ai-tools/blob/main/LICENSE">TrustPin Binary License Agreement</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">TrustPin AI tools. TrustPin is a trademark of Capa7 LLC. <a href="https://trustpin.cloud">trustpin.cloud</a></div>
+</footer>
+
+<script>
+document.querySelectorAll('.codeblock').forEach(function (block) {
+  var button = document.createElement('button');
+  button.className = 'copy';
+  button.type = 'button';
+  button.textContent = 'Copy';
+  button.addEventListener('click', function () {
+    var text = block.querySelector('code').textContent;
+    var done = function () { button.textContent = 'Copied'; setTimeout(function () { button.textContent = 'Copy'; }, 1500); };
+    try {
+      navigator.clipboard.writeText(text).then(done, function () {});
+    } catch (e) {}
+  });
+  block.appendChild(button);
+});
+</script>
+</body>
+</html>
