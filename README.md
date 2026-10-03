@@ -44,6 +44,8 @@ cp -r ai-tools/skills/trustpin-integration .agents/skills/
 - The skill is instructions and reference text. It adds no MCP server, no hooks, and no background process.
 - `skills/trustpin-integration/scripts/find_hosts.py` runs only when the agent or you start it. It reads source and config files in your project and prints the hostnames it finds. It makes no network requests and writes no files.
 - The skill may tell the agent to run the TrustPin CLI (`trustpin-cli`) if you have installed it. The CLI talks to the TrustPin API using a token you configure yourself. The skill instructs the agent never to ask for that token, the master password, or a private key, and never to publish a configuration without your explicit go-ahead.
+- The plugin itself reads no credentials and sends nothing anywhere. `references/cli.md` is documentation for your own shell and CI. Its commands pass your TrustPin API token (`TRUSTPIN_API_TOKEN`) and, for cloud-managed keys, your master password (`MASTER_PASSWORD`) to `trustpin-cli` through environment variables you set yourself, and the CLI sends them only to TrustPin's own API (`api.trustpin.cloud`). The skill never asks for these values, never writes them to a file, and never shows them in a command.
+- `references/cli.md` also shows how to install `trustpin-cli` in CI: it downloads a pinned release binary from the TrustPin GitHub release and verifies its SHA-256 digest before running it. This is text for you to put in your own pipeline. The plugin does not download or execute anything.
 
 ## Verified against
 
