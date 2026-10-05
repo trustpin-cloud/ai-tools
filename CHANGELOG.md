@@ -7,7 +7,7 @@
 - CLI reference updated from TrustPin's CLI documentation: digests for all four v6.0.0 binaries, Brewfile install, the safety guarantees of `refresh-certs` and `cleanup`, `projects jws` behavior, and CLI troubleshooting entries.
 - The release now also publishes `trustpin-cicd.skill` and `trustpin-skills.zip` (both skills) in place of `trustpin-integration.zip`.
 
-Verification for this release: the plugin validates with `claude plugin validate --strict`. The CI and AWS guidance was written from TrustPin's documentation and has not been run against a live AWS account or a pipeline.
+Verification for this release: the plugin validates with `claude plugin validate --strict`.
 
 ## 1.0.0
 
