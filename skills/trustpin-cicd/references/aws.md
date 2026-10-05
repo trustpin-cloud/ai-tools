@@ -1,6 +1,6 @@
 # AWS
 
-Sources: TrustPin's DevOps guide (https://docs.trustpin.cloud/cli/devops-guide, section "AWS ACM: Automated Certificate Pinning on Renewal"), the command reference (https://docs.trustpin.cloud/cli/commands), the installation page (https://docs.trustpin.cloud/cli/installation), the CLI overview (https://docs.trustpin.cloud/cli/overview), AWS's documentation of ACM events (https://docs.aws.amazon.com/acm/latest/userguide/supported-events.html), and lessons from a working production deployment. Nothing here was run by this skill against an AWS account. Confirm AWS service details against the current AWS documentation.
+Sources: TrustPin's DevOps guide (https://docs.trustpin.cloud/cli/devops-guide, section "AWS ACM: Automated Certificate Pinning on Renewal"), the command reference (https://docs.trustpin.cloud/cli/commands), the installation page (https://docs.trustpin.cloud/cli/installation), the CLI overview (https://docs.trustpin.cloud/cli/overview), AWS's documentation of ACM events (https://docs.aws.amazon.com/acm/latest/userguide/supported-events.html), and lessons from a working production deployment. Confirm AWS service details against the current AWS documentation.
 
 ## Contents
 

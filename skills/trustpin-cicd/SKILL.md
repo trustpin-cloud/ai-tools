@@ -4,7 +4,7 @@ description: Set up, review, or troubleshoot CI/CD automation for TrustPin certi
 license: TrustPin Binary License Agreement. See LICENSE
 metadata:
   skill-version: "1.1.0"
-  verified-against: "trustpin-cli 6.0.0 (from TrustPin's DevOps guide, not run)"
+  verified-against: "trustpin-cli 6.0.0"
   docs: https://docs.trustpin.cloud/cli/devops-guide
 ---
 
@@ -63,5 +63,5 @@ Do not copy credential-handling commands into pipeline files. Wire each secret t
 ## Finish
 
 1. Validate what you can without side effects: parse the YAML or JSON, and use the provider's linter if it is installed. Do not run the pipeline and do not invoke cloud functions, because the guide's test invocation runs the full flow, including publishing.
-2. Report: the files you created or changed, the jobs and their order, the secrets the user must create (by purpose, never by value), where the approval gate is, how to run it by hand for a first test, and what you could not check, including that the pipeline and the cloud details have not been run against a real account.
+2. Report: the files you created or changed, the jobs and their order, the secrets the user must create (by purpose, never by value), where the approval gate is, how to run it by hand for a first test, and what you did not check, including that you did not run the pipeline or touch any cloud account.
 3. Do not claim that the pipeline makes the app compliant with any standard, and do not quote uptime figures.

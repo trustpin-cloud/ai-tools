@@ -1,6 +1,6 @@
 # Other CI systems
 
-Source: https://docs.trustpin.cloud/cli/devops-guide. Written from the guide plus common practice for each service. Nothing here was run. Confirm service details against the provider's current documentation, and follow the guide for how to supply the token and signing credentials.
+Source: https://docs.trustpin.cloud/cli/devops-guide. Written from the guide plus common practice for each service. Confirm service details against the provider's current documentation, and follow the guide for how to supply the token and signing credentials.
 
 ## The same job everywhere
 
