@@ -49,6 +49,15 @@ Start every diagnosis the same way: set the log level to debug before setup, rep
 
 **A fix was published but the app still fails**: publishing propagates in a couple of minutes, and the SDK caches the configuration for 10 minutes. Wait, or restart the app.
 
+## CLI and pipelines
+
+- **`refresh-certs` reports no certificates and changes nothing.** The domain did not resolve, the TLS handshake failed, or there are no unexpired Certificate Transparency records for it. This is the fail-closed behavior, not a partial failure. Run `trustpin-cli domains certificates <host>` to see what TrustPin can see. If the host is internal-only, use `projects upsert` with a pin extracted another way.
+- **`refresh-certs` succeeds but the configuration version did not change.** Every certificate returned was already pinned with a matching expiry. This is expected, and it is what makes the command safe to run on a schedule.
+- **Expired pins on other domains remain after `--remove-expired`.** That flag is scoped to the named domain. Use `projects cleanup` to sweep the whole project.
+- **`sign --dry-run` fails with `INVALID_KEY_PAIR`.** The key does not belong to this project. Compare the public half of the key (derived with openssl) with the public key shown by `projects get`. The usual cause in multi-project pipelines is pairing a key with the wrong project ID.
+- **`sign --dry-run` fails with `INCORRECT_PASSWORD`.** The master password (cloud keys) or the key's password (bring your own key) the pipeline supplied is wrong. A dry run publishes nothing, so it is safe to iterate against the real project.
+- **HTTP 401 or exit code 3.** The token is missing, revoked, or expired, or it cannot access that organization or project.
+
 ## iOS and macOS
 
 - **System-wide pinning has no effect**: confirm `autoRegisterURLProtocol: true` was passed to setup or `TrustPin.registerURLProtocol()` was called, and that nothing unregisters it. Plain `http://` URLs are never pin-validated.

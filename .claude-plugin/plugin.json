@@ -1,7 +1,7 @@
 {
   "name": "trustpin",
   "displayName": "TrustPin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps.",
   "author": {
     "name": "TrustPin",

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0
+
+- New skill `trustpin-cicd` (`/trustpin:trustpin-cicd`): sets up or reviews CI/CD automation for pin rotation and release checks with trustpin-cli. Covers pinning automatically when an AWS ACM certificate renews (EventBridge and Lambda), scheduled refresh on CodeBuild and CodePipeline, a self-hosted configuration on S3 and CloudFront, and GitHub Actions, GitLab CI, Azure DevOps, Jenkins, CircleCI, and mobile CI services. It never handles secret values and never signs without approval.
+- The AWS reference uses ACM's events as AWS documents them, and adds lessons from a working deployment: one function for several certificates and projects, a schedule next to the event for drift and regional certificates, writable `/tmp` and cleanup, strict exit-code handling, and signing only when something changed.
+- CLI reference updated from TrustPin's CLI documentation: digests for all four v6.0.0 binaries, Brewfile install, the safety guarantees of `refresh-certs` and `cleanup`, `projects jws` behavior, and CLI troubleshooting entries.
+- The release now also publishes `trustpin-cicd.skill` and `trustpin-skills.zip` (both skills) in place of `trustpin-integration.zip`.
+
+Verification for this release: the plugin validates with `claude plugin validate --strict`. The CI and AWS guidance was written from TrustPin's documentation and has not been run against a live AWS account or a pipeline.
+
 ## 1.0.0
 
 First release.

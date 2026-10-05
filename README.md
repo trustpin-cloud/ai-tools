@@ -1,8 +1,8 @@
 # TrustPin AI tools
 
-An Agent Skill that teaches AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps.
+Agent Skills that teach AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps, and to run pin rotation in CI/CD (AWS and other CI systems).
 
-Once installed, ask your agent to "integrate TrustPin", "review our TrustPin integration", or "set up a pin rotation job".
+Once installed, ask your agent to "integrate TrustPin", "review our TrustPin integration", or "set up a pin rotation job". For pipelines, ask to "automate pin rotation in CI" or "pin automatically when our ACM certificate renews".
 
 ## Install
 
@@ -13,14 +13,14 @@ Once installed, ask your agent to "integrate TrustPin", "review our TrustPin int
 /plugin install trustpin@trustpin
 ```
 
-**Claude (web and desktop)**: download `trustpin-integration.skill` from the latest release and add it under Settings, Capabilities, Skills.
+**Claude (web and desktop)**: download `trustpin-integration.skill` (and `trustpin-cicd.skill` for CI/CD automation) from the latest release and add them under Settings, Capabilities, Skills.
 
-**Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills**: copy the skill folder into your project.
+**Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills**: copy the skill folders into your project.
 
 ```bash
 git clone https://github.com/trustpin-cloud/ai-tools
 mkdir -p .agents/skills
-cp -r ai-tools/skills/trustpin-integration .agents/skills/
+cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents/skills/
 ```
 
 `.agents/skills/` is the shared project location these agents read. Agent-specific locations also work: `.claude/skills/`, `.cursor/skills/`, `.github/skills/`. Check your agent's documentation if the skill is not picked up.
@@ -38,6 +38,8 @@ cp -r ai-tools/skills/trustpin-integration .agents/skills/
 | `references/review-checklist.md` | Auditing an existing integration |
 | `references/troubleshooting.md` | Error codes and fixes |
 | `scripts/find_hosts.py` | Lists the hosts a codebase connects to |
+| `skills/trustpin-cicd/SKILL.md` | CI/CD automation workflow for pin rotation and release checks |
+| `skills/trustpin-cicd/references/aws.md`, `ci-providers.md` | AWS (ACM renewal, EventBridge, Lambda, CodeBuild) and other CI systems |
 
 ## What this plugin runs and connects to
 

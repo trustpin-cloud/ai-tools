@@ -110,13 +110,13 @@ footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--m
 claude plugin install trustpin@trustpin</code></pre></div>
 
   <h3>Claude (web and desktop)</h3>
-  <p>Download <code>trustpin-integration.skill</code> from the <a href="https://github.com/trustpin-cloud/ai-tools/releases/latest">latest release</a> and add it under <strong>Settings, Capabilities, Skills</strong>.</p>
+  <p>Download <code>trustpin-integration.skill</code> (and <code>trustpin-cicd.skill</code> for CI/CD automation) from the <a href="https://github.com/trustpin-cloud/ai-tools/releases/latest">latest release</a> and add them under <strong>Settings, Capabilities, Skills</strong>.</p>
 
   <h3>Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills</h3>
-  <p>Copy the skill folder into your project:</p>
+  <p>Copy the skill folders into your project:</p>
   <div class="codeblock"><pre><code>git clone https://github.com/trustpin-cloud/ai-tools
 mkdir -p .agents/skills
-cp -r ai-tools/skills/trustpin-integration .agents/skills/</code></pre></div>
+cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents/skills/</code></pre></div>
   <p><code>.agents/skills/</code> is the shared project location these agents read. Agent-specific locations also work: <code>.claude/skills/</code>, <code>.cursor/skills/</code>, <code>.github/skills/</code>. Check your agent's documentation if the skill is not picked up.</p>
 
   <h3>Agents without skills support</h3>
@@ -127,7 +127,7 @@ cp -r ai-tools/skills/trustpin-integration .agents/skills/</code></pre></div>
   <ul>
     <li>Run <code>claude plugin list</code>. <code>trustpin@trustpin</code> should show as enabled. Inside a session, <code>/plugin</code> shows the same under Installed.</li>
     <li><code>claude plugin details trustpin</code> lists the skill it provides.</li>
-    <li>Type <code>/trustpin:trustpin-integration</code> to run it directly. Claude also loads it by itself when you mention TrustPin or certificate pinning.</li>
+    <li>Type <code>/trustpin:trustpin-integration</code> (or <code>/trustpin:trustpin-cicd</code>) to run a skill directly. Claude also loads it by itself when you mention TrustPin or certificate pinning.</li>
     <li>When it is used, the transcript shows a <code>Skill(trustpin:trustpin-integration)</code> call, and the agent reads the reference file for your platform.</li>
   </ul>
 
@@ -176,7 +176,7 @@ cp -r ai-tools/skills/trustpin-integration .agents/skills/</code></pre></div>
 <ul>
   <li><strong>Review:</strong> "Review our TrustPin integration." The agent works through a checklist covering configuration, initialization, coverage of every HTTP client, and operations, and cites file and line for each finding. It does not change code unless you ask.</li>
   <li><strong>Diagnose:</strong> paste an error such as <code>PINS_MISMATCH</code>, <code>DOMAIN_NOT_REGISTERED</code>, or <code>ALL_PINS_EXPIRED</code>. The agent explains the cause and the fix in your project.</li>
-  <li><strong>Automate:</strong> "Set up a pin rotation job" produces a CI pipeline using the TrustPin CLI.</li>
+  <li><strong>Automate:</strong> "Set up a pin rotation job" produces a CI pipeline using the TrustPin CLI. The second skill, <code>trustpin-cicd</code> (<code>/trustpin:trustpin-cicd</code>), covers pipelines in depth: pinning automatically when an AWS ACM certificate renews (EventBridge and Lambda), scheduled refresh on CodeBuild or CodePipeline, and GitHub Actions, GitLab CI, Azure DevOps, Jenkins, and CircleCI. It writes the pipeline definition and never handles your secrets or publishes without your approval.</li>
 </ul>
 </section>
 
