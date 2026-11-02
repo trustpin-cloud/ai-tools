@@ -10,10 +10,10 @@ Android API 25+, Kotlin 2.3.0+, Java 11+. The Maven Central artifact is an Andro
 
 ```kotlin
 dependencies {
-    implementation("cloud.trustpin:kotlin-sdk:6.4.0")
+    implementation("cloud.trustpin:kotlin-sdk:7.1.0")
     // Optional adapters. Add the one matching the app's client:
-    implementation("cloud.trustpin:trustpin-okhttp:6.4.0")  // OkHttp, Retrofit
-    implementation("cloud.trustpin:trustpin-ktor:6.4.0")    // Ktor with the OkHttp engine
+    implementation("cloud.trustpin:trustpin-okhttp:7.1.0")  // OkHttp, Retrofit
+    implementation("cloud.trustpin:trustpin-ktor:7.1.0")    // Ktor with the OkHttp engine
 }
 ```
 
@@ -91,7 +91,7 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-Take both values from the same `makeTlsPair()` call so the factory and trust manager belong to the same TrustPin instance. `makeSSLSocketFactory()` and `makeTrustManager()` also exist, but calling them separately gives you two objects with no guarantee they are matched. If you meet `TrustPinSSLSocketFactory.create()` from a `cloud.trustpin.kotlin.sdk.ssl` package in older material, it is not part of the public API of the 6.3.0 or 6.4.0 Android artifact and does not compile. Use `makeTlsPair()` or the adapter.
+Take both values from the same `makeTlsPair()` call so the factory and trust manager belong to the same TrustPin instance. `makeSSLSocketFactory()` and `makeTrustManager()` also exist, but calling them separately gives you two objects with no guarantee they are matched. If you meet `TrustPinSSLSocketFactory.create()` from a `cloud.trustpin.kotlin.sdk.ssl` package in older material, it is not part of the public API of the Android artifact and does not compile. Use `makeTlsPair()` or the adapter.
 
 **Retrofit**: pass the pinned `OkHttpClient` to `Retrofit.Builder().client(...)`. Find the existing client and add pinning to it. Do not create a second one.
 
@@ -132,6 +132,10 @@ To report suspected interception, install a `TrustPinValidationListener` with `T
 `TrustPinError` is a sealed class: `DomainNotRegistered`, `PinsMismatch`, `AllPinsExpired`, `InvalidServerCert`, `InvalidProjectConfig`, `ErrorFetchingPinningInfo`, `ConfigurationValidationFailed`, `ConfigIntegrityError`, `NotInitialized`, `AlreadyInitialized`, `SetupInProgress`, `LockTimeout`, `Timeout`, `SSLContextSetupFailed`, `UnsupportedDevice`.
 
 `NotInitialized` usually means a client was built before setup finished. Guard with `awaitConfiguration()`.
+
+## App attestation
+
+The optional `cloud.trustpin:kotlin-attest` artifact adds a `TrustPin-Attestation` token proving requests come from the genuine app on a genuine device. The OkHttp and Ktor adapters already carry it once attestation is set up. Add it only when the user asks for attestation, and follow the `trustpin-attestation` skill.
 
 ## Release builds
 

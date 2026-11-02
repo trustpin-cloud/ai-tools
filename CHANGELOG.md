@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.0
+
+- New skill `trustpin-attestation` (`/trustpin:trustpin-attestation`): adds, reviews, and troubleshoots TrustPin app attestation (Apple App Attest, Android Key Attestation, Google Play Integrity) on iOS, macOS, Android, Flutter, and React Native (bare and Expo), with token binding, assertions for sensitive operations, debug tokens for simulators and emulators, verifying tokens in the API or at a gateway, rolling out from monitor to enforce, and policy publishing with `trustpin-cli projects attestation`. It never handles the verifier's keys, secrets or debug tokens, and never publishes a policy without approval.
+- `trustpin-integration` now targets the 7.1 SDKs: TrustPinKit, kotlin-sdk, trustpin_sdk and @trustpin/react-native 7.1.0. Swift: watchOS 9, Mac Catalyst 15, Alamofire 5.10 or later for the adapter. Flutter: Flutter 3.44 and Swift Package Manager only, and `TrustPinDioInterceptor(dio: dio)`. Each platform reference points to the attestation skill, and the review checklist expects every TrustPin package on one 7.x version.
+- CLI reference updated to trustpin-cli 7.0.0 (digests for all four binaries), which adds the `projects attestation` commands. The pinning commands and flags are unchanged.
+- The release now also publishes `trustpin-attestation.skill`, and `trustpin-skills.zip` holds all three skills.
+
+Verification for this release:
+
+| Platform | Packages | What was checked |
+|---|---|---|
+| Swift | TrustPinKit, TrustPinAttestKit, TrustPinKitAlamofire 7.1.0 | Pinning and attestation reference snippets built in a Swift package for macOS (`swift build`) and iOS (`xcodebuild`), Xcode 27, Alamofire 5.12 |
+| Kotlin | kotlin-sdk, kotlin-attest, trustpin-okhttp, trustpin-ktor 7.1.0 | Reference snippets compiled (Kotlin 2.3.0, Android Gradle plugin 8.13) with OkHttp 4.12, Retrofit 2.11, Ktor 3.0, including exhaustive `when` over `TrustPinError` and `TrustPinAttestError` |
+| Flutter | trustpin_sdk, trustpin_attest 7.1.0 | Reference snippets pass `flutter analyze` (Flutter 3.47) in a new project |
+| React Native | @trustpin/react-native, @trustpin/react-native-attest 7.1.0 | JavaScript snippets type-checked against the npm packages (React Native 0.85); both Expo config plugins run through `expo prebuild` |
+| CLI | trustpin-cli 7.0.0 | The Linux x64 binary checked against its published digest |
+
 ## 1.1.0
 
 - New skill `trustpin-cicd` (`/trustpin:trustpin-cicd`): sets up or reviews CI/CD automation for pin rotation and release checks with trustpin-cli. Covers pinning automatically when an AWS ACM certificate renews (EventBridge and Lambda), scheduled refresh on CodeBuild and CodePipeline, a self-hosted configuration on S3 and CloudFront, and GitHub Actions, GitLab CI, Azure DevOps, Jenkins, CircleCI, and mobile CI services. It never handles secret values and never signs without approval.

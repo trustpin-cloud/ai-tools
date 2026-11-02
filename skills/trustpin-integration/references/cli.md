@@ -1,6 +1,6 @@
 # CLI, pin rotation, and CI
 
-Source: https://docs.trustpin.cloud/cli/overview, /cli/installation, /cli/commands, /cli/devops-guide, and the official CLI documentation at https://trustpin-cloud.github.io/homebrew-trustpin/trustpin-cli. Applies to trustpin-cli 6.0.0. Run `trustpin-cli <command> --help` to confirm flags on the installed version.
+Source: https://docs.trustpin.cloud/cli/overview, /cli/installation, /cli/commands, /cli/devops-guide, and the official CLI documentation at https://trustpin-cloud.github.io/homebrew-trustpin/trustpin-cli. Applies to trustpin-cli 7.0.0. Run `trustpin-cli <command> --help` to confirm flags on the installed version.
 
 ## Contents
 
@@ -30,22 +30,22 @@ brew trust trustpin-cloud/trustpin-cli   # one-time, required by Homebrew 6.0+
 brew install trustpin-cli
 ```
 
-Update with `brew update && brew upgrade trustpin-cli`. To install through a Brewfile, mark the formula as trusted so `brew bundle` does not prompt: `tap "trustpin-cloud/trustpin-cli"` and `brew "trustpin-cli", trusted: true` (Homebrew 6.0+). Check the installed version with `trustpin-cli --version`. Upgrading from v5 keeps existing commands, flags, exit codes, and JSON envelopes.
+Update with `brew update && brew upgrade trustpin-cli`. To install through a Brewfile, mark the formula as trusted so `brew bundle` does not prompt: `tap "trustpin-cloud/trustpin-cli"` and `brew "trustpin-cli", trusted: true` (Homebrew 6.0+). Check the installed version with `trustpin-cli --version`. Upgrading from v5 or v6 keeps the existing pinning commands and flags. v7.0.0 adds the `projects attestation` commands for app attestation policies (see the `trustpin-attestation` skill).
 
-Direct download (CI), pinned to the version this skill covers. The release publishes no checksum file, so verify against the SHA-256 digest shown on the release page (https://github.com/trustpin-cloud/homebrew-trustpin/releases/tag/v6.0.0). The binaries and their digests for v6.0.0:
+Direct download (CI), pinned to the version this skill covers. The release publishes no checksum file, so verify against the SHA-256 digest shown on the release page (https://github.com/trustpin-cloud/homebrew-trustpin/releases/tag/v7.0.0). The binaries and their digests for v7.0.0:
 
 | File | SHA-256 |
 |---|---|
-| `trustpin-cli-linux-x64` | `5bb889bc6ae131d2caef0fb6ec59f97aab95a5f400bc7ecb902494f522afce83` |
-| `trustpin-cli-linux-arm64` | `6b683fbcdde46c0a430364645f1e063149ce6a1f5a1fd696aa4a6303c7cbc091` |
-| `trustpin-cli-macos-x64` | `40389c349a9903a516f18790755ecaae55e7ddc2984b25e7f56b8367fbc7b893` |
-| `trustpin-cli-macos-arm64` | `b37ed6c7cabb7be80f11620cc095abc7628012ad8c7f93863bd183937566ce90` |
+| `trustpin-cli-linux-x64` | `c0620be18b0f2df6b2b77c3dbc5f15e5b18b8fe4af2c8680f733f3666aa45836` |
+| `trustpin-cli-linux-arm64` | `872d61feaa06a1fb74737c4977eb100119290916e3613a2efdc19968fe0b931e` |
+| `trustpin-cli-macos-x64` | `7f037e7a3e0be8034f5b86132e99d342782b1d734b3c0a0aefbaad17ec00920f` |
+| `trustpin-cli-macos-arm64` | `0c10e79c150b7858e652867fc0035f26bc3fcbcbe4ae3e1e8dab4d8e405b91c2` |
 
 Linux x64 example:
 
 ```bash
-curl -fL https://github.com/trustpin-cloud/homebrew-trustpin/releases/download/v6.0.0/trustpin-cli-linux-x64 -o trustpin-cli
-echo "5bb889bc6ae131d2caef0fb6ec59f97aab95a5f400bc7ecb902494f522afce83  trustpin-cli" | sha256sum -c -
+curl -fL https://github.com/trustpin-cloud/homebrew-trustpin/releases/download/v7.0.0/trustpin-cli-linux-x64 -o trustpin-cli
+echo "c0620be18b0f2df6b2b77c3dbc5f15e5b18b8fe4af2c8680f733f3666aa45836  trustpin-cli" | sha256sum -c -
 chmod +x trustpin-cli && sudo mv trustpin-cli /usr/local/bin/
 ```
 

@@ -1,12 +1,15 @@
 {
   "name": "trustpin",
-  "description": "TrustPin tools for AI coding agents: integrate, review, and automate certificate pinning in mobile apps.",
-  "owner": { "name": "TrustPin", "email": "contact@trustpin.cloud" },
+  "description": "TrustPin tools for AI coding agents: integrate, review, and automate certificate pinning and app attestation in mobile apps.",
+  "owner": {
+    "name": "TrustPin",
+    "email": "contact@trustpin.cloud"
+  },
   "plugins": [
     {
       "name": "trustpin",
       "source": "./",
-      "description": "Integrate, review, and automate TrustPin certificate pinning in mobile apps."
+      "description": "Integrate, review, and automate TrustPin certificate pinning and app attestation in mobile apps."
     }
   ]
 }

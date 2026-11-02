@@ -1,8 +1,8 @@
 # TrustPin AI tools
 
-Agent Skills that teach AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps, and to run pin rotation in CI/CD (AWS and other CI systems).
+Agent Skills that teach AI coding agents to integrate, review, and automate TrustPin certificate pinning and app attestation in iOS, macOS, Android, Flutter, and React Native apps, to verify attestation tokens in the backend, and to run pin rotation in CI/CD (AWS and other CI systems).
 
-Once installed, ask your agent to "integrate TrustPin", "review our TrustPin integration", or "set up a pin rotation job". For pipelines, ask to "automate pin rotation in CI" or "pin automatically when our ACM certificate renews".
+Once installed, ask your agent to "integrate TrustPin", "review our TrustPin integration", or "set up a pin rotation job". For pipelines, ask to "automate pin rotation in CI" or "pin automatically when our ACM certificate renews". For attestation, ask to "add TrustPin app attestation" or "verify the TrustPin-Attestation header in our API".
 
 ## Install
 
@@ -13,19 +13,19 @@ Once installed, ask your agent to "integrate TrustPin", "review our TrustPin int
 /plugin install trustpin@trustpin
 ```
 
-**Claude (web and desktop)**: download `trustpin-integration.skill` (and `trustpin-cicd.skill` for CI/CD automation) from the latest release and add them under Settings, Capabilities, Skills.
+**Claude (web and desktop)**: download `trustpin-integration.skill` (and `trustpin-attestation.skill` for app attestation, `trustpin-cicd.skill` for CI/CD automation) from the latest release and add them under Settings, Capabilities, Skills.
 
 **Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills**: copy the skill folders into your project.
 
 ```bash
 git clone https://github.com/trustpin-cloud/ai-tools
 mkdir -p .agents/skills
-cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents/skills/
+cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-attestation ai-tools/skills/trustpin-cicd .agents/skills/
 ```
 
 `.agents/skills/` is the shared project location these agents read. Agent-specific locations also work: `.claude/skills/`, `.cursor/skills/`, `.github/skills/`. Check your agent's documentation if the skill is not picked up.
 
-**Agents without skills support**: keep the folder in the repository and add this line to `AGENTS.md`: "When working with TrustPin or certificate pinning, read `.agents/skills/trustpin-integration/SKILL.md` first."
+**Agents without skills support**: keep the folders in the repository and add this line to `AGENTS.md`: "When working with TrustPin or certificate pinning, read `.agents/skills/trustpin-integration/SKILL.md` first; for app attestation, read `.agents/skills/trustpin-attestation/SKILL.md`."
 
 ## What is inside
 
@@ -38,6 +38,11 @@ cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents
 | `references/review-checklist.md` | Auditing an existing integration |
 | `references/troubleshooting.md` | Error codes and fixes |
 | `scripts/find_hosts.py` | Lists the hosts a codebase connects to |
+| `skills/trustpin-attestation/SKILL.md` | App attestation workflow and the rules that hold on every platform |
+| `skills/trustpin-attestation/references/swift.md`, `kotlin.md`, `flutter.md`, `react-native.md` | Per-platform attestation integration |
+| `skills/trustpin-attestation/references/project-side.md` | Policy, verifier, domain registration, and policy publishing with the CLI |
+| `skills/trustpin-attestation/references/backend.md` | Verifying tokens and assertions in the API or at a gateway |
+| `skills/trustpin-attestation/references/review-checklist.md`, `troubleshooting.md` | Auditing an attestation integration, and its errors |
 | `skills/trustpin-cicd/SKILL.md` | CI/CD automation workflow for pin rotation and release checks |
 | `skills/trustpin-cicd/references/aws.md`, `ci-providers.md` | AWS (ACM renewal, EventBridge, Lambda, CodeBuild) and other CI systems |
 
@@ -45,13 +50,14 @@ cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents
 
 - The skill is instructions and reference text. It adds no MCP server, no hooks, and no background process.
 - `skills/trustpin-integration/scripts/find_hosts.py` runs only when the agent or you start it. It reads source and config files in your project and prints the hostnames it finds. It makes no network requests and writes no files.
+- The attestation skill writes code in your app and, if you ask, in your API. It never contacts your verifier or the TrustPin API itself, never asks for the verifier's keys, secrets or debug tokens, and never publishes an attestation policy without your explicit go-ahead.
 - The skill may tell the agent to run the TrustPin CLI (`trustpin-cli`) if you have installed it. The CLI talks to the TrustPin API using a token you configure yourself. The skill instructs the agent never to ask for that token, the master password, or a private key, and never to publish a configuration without your explicit go-ahead.
 - The plugin itself reads no credentials and sends nothing anywhere. `references/cli.md` is documentation for your own shell and CI. It contains no credential values and no commands that read credentials: you enter your API token and master password at the CLI's own prompt, or supply them from your CI secret store as TrustPin's DevOps guide describes. The skill never asks for these values, never writes them to a file, and never shows them in a command.
 - `references/cli.md` also shows how to install `trustpin-cli` in CI: it downloads a pinned release binary from the TrustPin GitHub release and verifies its SHA-256 digest before running it. This is text for you to put in your own pipeline. The plugin does not download or execute anything.
 
 ## Verified against
 
-TrustPinKit 6.4.0, kotlin-sdk 6.4.0, trustpin_sdk 6.4.0, @trustpin/react-native 6.4.0. See `CHANGELOG.md` for what "verified" covers.
+TrustPinKit 7.1.0, kotlin-sdk 7.1.0, trustpin_sdk 7.1.0, @trustpin/react-native 7.1.0, and their attestation packages TrustPinAttestKit, kotlin-attest, trustpin_attest and @trustpin/react-native-attest 7.1.0; attest-verifier 1.0.0; trustpin-cli 7.0.0. See `CHANGELOG.md` for what "verified" covers.
 
 Documentation: https://docs.trustpin.cloud. Technical support: support@trustpin.cloud. Other inquiries: contact@trustpin.cloud. Issues and corrections are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: see [SECURITY.md](SECURITY.md).
 

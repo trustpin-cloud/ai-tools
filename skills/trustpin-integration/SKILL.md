@@ -1,10 +1,10 @@
 ---
 name: trustpin-integration
-description: Integrate, review, or automate TrustPin certificate pinning in an iOS, macOS, Android, Flutter, or React Native (bare or Expo) app. Use this skill whenever the user mentions TrustPin, TrustPinKit, trustpin_sdk, @trustpin/react-native, cloud.trustpin, trustpin-cli, TrustPin-Info.plist, or trustpin.json, and also when they ask to add certificate pinning, SSL pinning, public key pinning, or remotely updatable pins to a mobile app and TrustPin is in the project or is the chosen tool. Covers first-time SDK integration, wiring pinning into an existing HTTP client (URLSession, Alamofire, OkHttp, Retrofit, Ktor, HttpsURLConnection, Dio, package:http, fetch), auditing an existing TrustPin integration, diagnosing pinning errors, and pin rotation or CI automation with the TrustPin CLI.
+description: Integrate, review, or automate TrustPin certificate pinning in an iOS, macOS, Android, Flutter, or React Native (bare or Expo) app. Use this skill whenever the user mentions TrustPin, TrustPinKit, trustpin_sdk, @trustpin/react-native, cloud.trustpin, trustpin-cli, TrustPin-Info.plist, or trustpin.json, and also when they ask to add certificate pinning, SSL pinning, public key pinning, or remotely updatable pins to a mobile app and TrustPin is in the project or is the chosen tool. Covers first-time SDK integration, wiring pinning into an existing HTTP client (URLSession, Alamofire, OkHttp, Retrofit, Ktor, HttpsURLConnection, Dio, package:http, fetch), auditing an existing TrustPin integration, diagnosing pinning errors, and pin rotation or CI automation with the TrustPin CLI. For app attestation (the TrustPin-Attestation header, App Attest, Play Integrity), use trustpin-attestation instead.
 license: TrustPin Binary License Agreement. See LICENSE
 metadata:
-  skill-version: "1.1.0"
-  verified-against: "TrustPinKit 6.4.0, kotlin-sdk 6.4.0, trustpin_sdk 6.4.0, @trustpin/react-native 6.4.0, trustpin-cli 6.0.0"
+  skill-version: "1.2.0"
+  verified-against: "TrustPinKit 7.1.0, kotlin-sdk 7.1.0, trustpin_sdk 7.1.0, @trustpin/react-native 7.1.0, trustpin-cli 7.0.0"
   docs: https://docs.trustpin.cloud
 ---
 
@@ -18,6 +18,7 @@ TrustPin delivers certificate pins to an app as a signed configuration fetched a
 | An existing integration checked, or a pinning error explained | `references/review-checklist.md`, then `references/troubleshooting.md` |
 | Pins rotated by hand, or bring-your-own-key signing | `references/cli.md` |
 | A CI/CD pipeline for pin rotation, automatic pinning when an AWS ACM certificate renews, or release checks in CI | The `trustpin-cicd` skill (it builds on `references/cli.md`) |
+| App attestation: proving to the API that requests come from the genuine app on a genuine device | The `trustpin-attestation` skill. It needs pinning in place first, so finish this workflow if pinning is missing |
 
 The SDK API references are the most current source: https://trustpin-cloud.github.io/swift.sdk, https://trustpin-cloud.github.io/kotlin.sdk, https://trustpin-cloud.github.io/flutter.sdk, https://trustpin-cloud.github.io/react-native.sdk. The documentation at https://docs.trustpin.cloud and the SDK repositories at https://github.com/trustpin-cloud are the wider source of truth. If the installed SDK behaves differently from this skill, follow the SDK and tell the user what differed.
 
@@ -73,7 +74,7 @@ Why this matters: the default mode is `strict`, and in strict mode a pinned clie
 
 Follow the reference file. On every platform the shape is the same:
 
-1. Add the SDK dependency. Use the newest 6.x release on the platform's registry. The versions in the reference files are the ones this skill was verified against.
+1. Add the SDK dependency. Use the newest 7.x release on the platform's registry, and keep every TrustPin package in the app on the same version. The versions in the reference files are the ones this skill was verified against.
 2. Add the bundled config file (`TrustPin-Info.plist` on Apple platforms, `trustpin.json` on Android) holding the three project values.
 3. Call setup once at app start.
 4. Wire pinning into the existing HTTP client. Find the client the app already uses and modify it. Do not introduce a new networking library, and do not leave a second, unpinned client talking to the same hosts.
