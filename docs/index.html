@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TrustPin AI tools</title>
-<meta name="description" content="An Agent Skill that teaches AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps.">
+<meta name="description" content="Agent Skills that teach AI coding agents to integrate, review, and automate TrustPin certificate pinning and app attestation in iOS, macOS, Android, Flutter, and React Native apps.">
 <style>
 :root {
   --bg: #ffffff; --fg: #1b1f24; --muted: #59636e; --line: #d8dee4;
@@ -84,7 +84,7 @@ footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--m
 
 <div class="hero">
   <h1>Add TrustPin certificate pinning with your AI coding agent</h1>
-  <p class="lead">An Agent Skill that teaches AI coding agents to integrate, review, and automate TrustPin certificate pinning in iOS, macOS, Android, Flutter, and React Native apps (bare and Expo).</p>
+  <p class="lead">Agent Skills that teach AI coding agents to integrate, review, and automate TrustPin certificate pinning and app attestation in iOS, macOS, Android, Flutter, and React Native apps (bare and Expo).</p>
   <div class="cta">
     <a class="btn" href="#install">Install it</a>
     <a class="btn alt" href="https://github.com/trustpin-cloud/ai-tools">GitHub repository</a>
@@ -95,6 +95,7 @@ footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--m
     <li>Review our TrustPin integration before release.</li>
     <li>Set up a pin rotation job.</li>
     <li>Requests fail with PINS_MISMATCH, what do I do?</li>
+    <li>Add TrustPin app attestation and verify the header in our API.</li>
   </ul>
 </div>
 
@@ -110,24 +111,24 @@ footer { border-top: 1px solid var(--line); padding: 24px 0 48px; color: var(--m
 claude plugin install trustpin@trustpin</code></pre></div>
 
   <h3>Claude (web and desktop)</h3>
-  <p>Download <code>trustpin-integration.skill</code> (and <code>trustpin-cicd.skill</code> for CI/CD automation) from the <a href="https://github.com/trustpin-cloud/ai-tools/releases/latest">latest release</a> and add them under <strong>Settings, Capabilities, Skills</strong>.</p>
+  <p>Download <code>trustpin-integration.skill</code> (and <code>trustpin-attestation.skill</code> for app attestation, <code>trustpin-cicd.skill</code> for CI/CD automation) from the <a href="https://github.com/trustpin-cloud/ai-tools/releases/latest">latest release</a> and add them under <strong>Settings, Capabilities, Skills</strong>.</p>
 
   <h3>Cursor, GitHub Copilot, Codex, and other agents that read Agent Skills</h3>
   <p>Copy the skill folders into your project:</p>
   <div class="codeblock"><pre><code>git clone https://github.com/trustpin-cloud/ai-tools
 mkdir -p .agents/skills
-cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents/skills/</code></pre></div>
+cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-attestation ai-tools/skills/trustpin-cicd .agents/skills/</code></pre></div>
   <p><code>.agents/skills/</code> is the shared project location these agents read. Agent-specific locations also work: <code>.claude/skills/</code>, <code>.cursor/skills/</code>, <code>.github/skills/</code>. Check your agent's documentation if the skill is not picked up.</p>
 
   <h3>Agents without skills support</h3>
   <p>Keep the folder in your repository and add this line to <code>AGENTS.md</code>:</p>
-  <div class="codeblock"><pre><code>When working with TrustPin or certificate pinning, read `.agents/skills/trustpin-integration/SKILL.md` first.</code></pre></div>
+  <div class="codeblock"><pre><code>When working with TrustPin or certificate pinning, read `.agents/skills/trustpin-integration/SKILL.md` first; for app attestation, read `.agents/skills/trustpin-attestation/SKILL.md`.</code></pre></div>
 
   <h3>Check that it is active (Claude Code)</h3>
   <ul>
     <li>Run <code>claude plugin list</code>. <code>trustpin@trustpin</code> should show as enabled. Inside a session, <code>/plugin</code> shows the same under Installed.</li>
     <li><code>claude plugin details trustpin</code> lists the skill it provides.</li>
-    <li>Type <code>/trustpin:trustpin-integration</code> (or <code>/trustpin:trustpin-cicd</code>) to run a skill directly. Claude also loads it by itself when you mention TrustPin or certificate pinning.</li>
+    <li>Type <code>/trustpin:trustpin-integration</code> (or <code>/trustpin:trustpin-attestation</code>, <code>/trustpin:trustpin-cicd</code>) to run a skill directly. Claude also loads it by itself when you mention TrustPin or certificate pinning.</li>
     <li>When it is used, the transcript shows a <code>Skill(trustpin:trustpin-integration)</code> call, and the agent reads the reference file for your platform.</li>
   </ul>
 
@@ -177,6 +178,7 @@ cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents
   <li><strong>Review:</strong> "Review our TrustPin integration." The agent works through a checklist covering configuration, initialization, coverage of every HTTP client, and operations, and cites file and line for each finding. It does not change code unless you ask.</li>
   <li><strong>Diagnose:</strong> paste an error such as <code>PINS_MISMATCH</code>, <code>DOMAIN_NOT_REGISTERED</code>, or <code>ALL_PINS_EXPIRED</code>. The agent explains the cause and the fix in your project.</li>
   <li><strong>Automate:</strong> "Set up a pin rotation job" produces a CI pipeline using the TrustPin CLI. The second skill, <code>trustpin-cicd</code> (<code>/trustpin:trustpin-cicd</code>), covers pipelines in depth: pinning automatically when an AWS ACM certificate renews (EventBridge and Lambda), scheduled refresh on CodeBuild or CodePipeline, and GitHub Actions, GitLab CI, Azure DevOps, Jenkins, and CircleCI. It writes the pipeline definition and never handles your secrets or publishes without your approval.</li>
+  <li><strong>Attest:</strong> "Add TrustPin app attestation" adds the attestation package next to pinning, binds tokens to the session, and makes your HTTP client carry the <code>TrustPin-Attestation</code> header. The third skill, <code>trustpin-attestation</code> (<code>/trustpin:trustpin-attestation</code>), also writes the token check in your API, adds assertions to sensitive operations, explains attestation errors, and keeps the policy in your repository with the CLI. You set up the policy and run the verifier; the skill never handles its keys or secrets.</li>
 </ul>
 </section>
 
@@ -187,7 +189,7 @@ cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-cicd .agents
 <tbody>
 <tr><td>Swift (iOS, macOS)</td><td>iOS 15+, macOS 13+, Swift 6.1+, Xcode 16.3+</td><td>URLSession, Alamofire, system-wide URL protocol</td></tr>
 <tr><td>Kotlin (Android)</td><td>Android API 25+, Kotlin 2.3.0+, Java 11+</td><td>OkHttp, Retrofit, Ktor (OkHttp engine), HttpsURLConnection</td></tr>
-<tr><td>Flutter</td><td>iOS 15+, Android API 25+, macOS 13+</td><td>Dio, <code>package:http</code></td></tr>
+<tr><td>Flutter</td><td>Flutter 3.44+, iOS 15+, Android API 25+, macOS 13+</td><td>Dio, <code>package:http</code></td></tr>
 <tr><td>React Native (bare and Expo)</td><td>React Native 0.85+ with the New Architecture, Node 22.11+, iOS 15+, Android API 25+</td><td>Plain <code>fetch</code>, pinned natively with no client wiring</td></tr>
 </tbody></table></div>
 <div class="note"><strong>Expo Go cannot run pinning</strong> because it is native code. Use a development build.</div>
@@ -231,11 +233,12 @@ claude plugin marketplace remove trustpin</code></pre></div>
 <div class="tablewrap"><table>
 <thead><tr><th>Component</th><th>Version</th></tr></thead>
 <tbody>
-<tr><td>TrustPinKit (Swift)</td><td>6.4.0</td></tr>
-<tr><td>kotlin-sdk (Android)</td><td>6.4.0</td></tr>
-<tr><td>trustpin_sdk (Flutter)</td><td>6.4.0</td></tr>
-<tr><td>@trustpin/react-native</td><td>6.4.0</td></tr>
-<tr><td>trustpin-cli</td><td>6.0.0</td></tr>
+<tr><td>TrustPinKit and TrustPinAttestKit (Swift)</td><td>7.1.0</td></tr>
+<tr><td>kotlin-sdk and kotlin-attest (Android)</td><td>7.1.0</td></tr>
+<tr><td>trustpin_sdk and trustpin_attest (Flutter)</td><td>7.1.0</td></tr>
+<tr><td>@trustpin/react-native and @trustpin/react-native-attest</td><td>7.1.0</td></tr>
+<tr><td>attest-verifier</td><td>1.0.0</td></tr>
+<tr><td>trustpin-cli</td><td>7.0.0</td></tr>
 </tbody></table></div>
 <p>If your installed SDK behaves differently from what the skill says, the SDK is the source of truth. The API references are the most current: <a href="https://trustpin-cloud.github.io/swift.sdk">Swift</a>, <a href="https://trustpin-cloud.github.io/kotlin.sdk">Kotlin</a>, <a href="https://trustpin-cloud.github.io/flutter.sdk">Flutter</a>, <a href="https://trustpin-cloud.github.io/react-native.sdk">React Native</a>. Tell your agent what differed, and tell us.</p>
 </section>

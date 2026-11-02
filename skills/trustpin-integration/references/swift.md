@@ -4,15 +4,15 @@ Source: https://docs.trustpin.cloud/sdk/swift. API reference: https://trustpin-c
 
 ## Requirements
 
-iOS 15+, macOS 13+, Mac Catalyst 15+ (also watchOS 8+, tvOS 15+, visionOS 2+). Swift 6.1+, Xcode 16.3+. async/await is required.
+iOS 15+, macOS 13+, Mac Catalyst 15+ (also watchOS 9+, tvOS 15+, visionOS 2+). Swift 6.1+, Xcode 16.3+. async/await is required. The Alamofire adapter needs Alamofire 5.10 or later.
 
 ## Install
 
-Swift Package Manager (preferred): `https://github.com/trustpin-cloud/swift.sdk`, version 6.4.0, Up to Next Major.
+Swift Package Manager (preferred): `https://github.com/trustpin-cloud/swift.sdk`, version 7.1.0, Up to Next Major.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/trustpin-cloud/swift.sdk", from: "6.4.0")
+    .package(url: "https://github.com/trustpin-cloud/swift.sdk", from: "7.1.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
@@ -23,7 +23,7 @@ targets: [
 ]
 ```
 
-CocoaPods: `pod 'TrustPinKit', '~> 6.4'`, then `pod install`. The Alamofire adapter is SPM only.
+CocoaPods: `pod 'TrustPinKit', '~> 7.1'`, then `pod install`. The Alamofire adapter is SPM only.
 
 For an Xcode project without a `Package.swift`, you usually cannot add the package reliably by editing `project.pbxproj`. Ask the user to add it through File, Add Package Dependencies, and continue with the code.
 
@@ -129,6 +129,10 @@ To report suspected interception, implement `TrustPinValidationListener` (`onVal
 ## Errors
 
 Cases of `TrustPinErrors`: `invalidProjectConfig`, `errorFetchingPinningInfo`, `configurationValidationFailed`, `domainNotRegistered`, `pinsMismatch`, `allPinsExpired`, `invalidServerCert`, `alreadyInitialized`, `timeout`, `configIntegrityFailed`.
+
+## App attestation
+
+The same package vends `TrustPinAttestKit`, which adds a `TrustPin-Attestation` token proving requests come from the genuine app on a genuine device. It is a separate product: add it only when the user asks for attestation, and follow the `trustpin-attestation` skill.
 
 ## Multiple projects
 

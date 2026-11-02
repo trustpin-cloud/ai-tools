@@ -32,7 +32,7 @@ Use this when the user asks you to check, audit, or review a TrustPin integratio
 15. Production log level is error or none.
 16. Pin-validation failures are observable (validation listener or event stream feeding the app's monitoring). Recommended, not required.
 17. If an embedded configuration is shipped: the user confirms RASP protection, and a build step regenerates the file on every release.
-18. The SDK is on a current 6.x release.
+18. The SDK is on a current 7.x release (7.1 or later), and every TrustPin package in the app is on the same version.
 19. Rotation is owned: there is a scheduled refresh job or a named person, and pins for each host include more than the single live certificate where the provider rotates keys.
 
 ## Reporting

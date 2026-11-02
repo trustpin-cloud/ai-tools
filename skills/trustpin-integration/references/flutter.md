@@ -4,13 +4,15 @@ Source: https://docs.trustpin.cloud/sdk/dart. API reference: https://trustpin-cl
 
 ## Requirements
 
-iOS 15+, Android API 25+, macOS 13+. iOS/macOS: Swift 6.1+, Xcode 16.3+. Android: Kotlin 2.3.0+, Java 11+. The package bundles the native SDKs, so there is nothing else to install.
+Flutter 3.44.0+. iOS 15+, Android API 25+, macOS 13+. iOS/macOS: Swift 6.1+, Xcode 16.3+, through Swift Package Manager only: from 7.1.0 the plugin ships no podspec, so an app that turned Swift Package Manager off must turn it back on (`flutter config --enable-swift-package-manager`). Android: Kotlin 2.3.0+, Java 11+. The package bundles the native SDKs, so there is nothing else to install.
+
+If the project is below Flutter 3.44, stop and tell the user. Do not upgrade Flutter as a side effect.
 
 ## Install
 
 ```yaml
 dependencies:
-  trustpin_sdk: ^6.4.0
+  trustpin_sdk: ^7.1.0
 ```
 
 Then `flutter pub get`. Confirm `minSdk 25` or higher in `android/app/build.gradle`.
@@ -90,10 +92,10 @@ await TrustPin.shared.setupWithNativeBundle(
 
 ## Wire the HTTP client
 
-**Dio (recommended)**: add the interceptor to the existing `Dio` instance.
+**Dio (recommended)**: add the interceptor to the existing `Dio` instance, and pass that instance so the interceptor can follow redirects of requests that carry an attestation header.
 
 ```dart
-dio.interceptors.add(TrustPinDioInterceptor());
+dio.interceptors.add(TrustPinDioInterceptor(dio: dio));
 ```
 
 Pinning failures arrive as a `DioException` whose `error` is a `TrustPinException`.
@@ -131,5 +133,9 @@ All errors are `TrustPinException` with `code` and `message`, plus getters: `isD
 final pin = TrustPin.instance('payments');
 await pin.setupWithNativeBundle(iosFileName: 'TrustPin-Payments.plist',
     androidFileName: 'trustpin-payments.json');
-dio.interceptors.add(TrustPinDioInterceptor(instance: pin));
+dio.interceptors.add(TrustPinDioInterceptor(instance: pin, dio: dio));
 ```
+
+## App attestation
+
+The companion package `trustpin_attest` (same version as `trustpin_sdk`) makes `TrustPinDioInterceptor` and `TrustPinHttpClient` add a `TrustPin-Attestation` token proving requests come from the genuine app on a genuine device. Add it only when the user asks for attestation, and follow the `trustpin-attestation` skill.

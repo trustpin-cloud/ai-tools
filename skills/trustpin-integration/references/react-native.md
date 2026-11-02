@@ -11,7 +11,7 @@ Pinning is configured and activated in native code before any JavaScript runs. O
 
 ## Requirements
 
-React Native 0.85+ with the New Architecture, Node 22.11+, iOS 15+, Android API 25+ (React Native's default minSdk is 24), Kotlin 2.3.0+. No macOS. Expo Go cannot run pinning, since it is native code: a development build is required.
+React Native 0.85+ with the New Architecture, Node 22.11+, iOS 15+, Android API 25+ (React Native's default minSdk is 24), Kotlin 2.3.0+. No macOS. Expo Go cannot run pinning, since it is native code: a development build is required. This skill covers `@trustpin/react-native` 7.1.x.
 
 If the project is below React Native 0.85 or on the old architecture, stop and tell the user. Do not attempt an upgrade as a side effect.
 
@@ -154,3 +154,7 @@ Other methods: `isConfigurationLoaded()`, `validateConnection(host, port?, timeo
 ## Errors
 
 Every rejection carries a stable `code`: `PINS_MISMATCH`, `ALL_PINS_EXPIRED`, `DOMAIN_NOT_REGISTERED`, `INVALID_SERVER_CERT`, `FETCH_CERTIFICATE_TIMEOUT`, `INVALID_PROJECT_CONFIG`, `INVALID_ARGUMENTS`. Android also: `UNSUPPORTED_DEVICE`, `SETUP_IN_PROGRESS`, `LOCK_TIMEOUT`, `SSL_CONTEXT_SETUP_FAILED`.
+
+## App attestation
+
+The companion package `@trustpin/react-native-attest` (same version as `@trustpin/react-native`) starts natively next to pinning; `fetch`, `XMLHttpRequest` and axios then carry a `TrustPin-Attestation` token proving requests come from the genuine app on a genuine device. Add it only when the user asks for attestation, and follow the `trustpin-attestation` skill.
