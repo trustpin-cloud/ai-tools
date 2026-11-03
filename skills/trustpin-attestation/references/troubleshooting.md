@@ -21,7 +21,7 @@ Start every diagnosis the same way: set the attestation log level to debug, repr
 
 **`VERIFIER_UNAVAILABLE`** every time: the verifier's host is not a registered domain of the TrustPin project (strict pinning refuses it), the verifier is down, or the URL is wrong. Register the domain and publish the pin configuration; never switch pinning to permissive.
 
-**`VERIFIER_INCOMPATIBLE`**: the verifier is older than contract version 2. Upgrade it to 0.2.2 or later (1.0.0 current). The app needs no change.
+**`VERIFIER_INCOMPATIBLE`**: the verifier is older than contract version 2. Upgrade it to 1.0.0 or later. The app needs no change.
 
 **`ATTESTATION_FAILED`** with `reasons`:
 

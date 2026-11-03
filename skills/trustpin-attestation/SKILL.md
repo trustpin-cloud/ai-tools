@@ -55,7 +55,7 @@ Attestation uses the pinning SDK of the same version: the verifier calls are pin
 Ask the user, and walk them through `references/project-side.md` for anything missing:
 
 1. Attestation is set up for the project and a policy is published (in **monitor** mode to start).
-2. The verifier is deployed and reachable over HTTPS, at contract version 2 or newer (verifier 0.2.2 or later; the current release is 1.0.0).
+2. The verifier is deployed and reachable over HTTPS, at contract version 2 or newer: verifier 1.0.0 or later.
 3. The verifier's host is a registered domain of the TrustPin project. In strict mode an unregistered verifier host fails every call (`verifierUnavailable`) and no header is ever sent.
 
 The code can be written before this is done, but it cannot be verified until all three hold.
