@@ -80,6 +80,8 @@ With `addingAttestation(to:)` and a request built in many places, add it in the 
 ```swift
 import CryptoKit
 
+// With header binding, let the framework see this request's Authorization value first.
+request = await TrustPinAttest.addingAttestation(to: request)
 let digest = Data(SHA256.hash(data: body))
 for (name, value) in try await TrustPinAttest.assertionHeaders(payloadDigest: digest) {
     request.setValue(value, forHTTPHeaderField: name)

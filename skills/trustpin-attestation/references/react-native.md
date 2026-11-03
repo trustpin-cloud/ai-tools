@@ -8,7 +8,7 @@ Like pinning, attestation starts in **native code** before JavaScript runs, from
 
 ## Requirements
 
-React Native 0.85+ (New Architecture), iOS 15+, Android API 25+, Kotlin 2.3.0+. `@trustpin/react-native` set up at the same version as `@trustpin/react-native-attest` (7.1.0 or later). Expo Go cannot run it: a development build is required. The native device requirements apply (`references/swift.md`, `references/kotlin.md`).
+React Native 0.85+ (New Architecture), iOS 15+, Android API 25+, Kotlin 2.3.0+. `@trustpin/react-native` set up at the same version as `@trustpin/react-native-attest` (7.1.1 or later). Expo Go cannot run it: a development build is required. The native device requirements apply (`references/swift.md`, `references/kotlin.md`).
 
 ## Install
 
@@ -79,6 +79,8 @@ Other calls: `getToken()`, `attestationHeaders(url, { method, headers })` (for c
 ```ts
 const body = JSON.stringify(payload);
 const headers: Record<string, string> = { Authorization: `Bearer ${session}`, 'Content-Type': 'application/json' };
+// With header binding, ask for this request's token first, then the assertion.
+Object.assign(headers, await TrustPinAttest.attestationHeaders(url, { method: 'POST', headers }));
 Object.assign(headers, await TrustPinAttest.assertionHeaders(sha256Bytes(body)));
 await fetch(url, { method: 'POST', headers, body });
 ```

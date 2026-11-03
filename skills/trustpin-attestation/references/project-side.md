@@ -39,7 +39,7 @@ Setting up attestation and its **first publish** happen in the console: project,
 
 The verifier runs in the user's infrastructure, behind their gateway, from the deployment bundle on the console's **Deployment** tab (Docker Compose, Kubernetes, or an env file). The image is `trustpincloud/attest-verifier`, pinned to an exact version (1.0.0 or later). Its signing keys and challenge secrets are generated with the image's `keygen` command and kept in the user's secret store. Full steps: https://docs.trustpin.cloud/attestation/verifier.
 
-The SDKs 7.1 require a verifier at contract version 2 or newer (0.2.2 or later). An older one makes the SDK report `verifierIncompatible` and send no header.
+The SDKs 7.1 require a verifier at contract version 2 or newer (verifier 1.0.0 or later). An older one makes the SDK report `verifierIncompatible` and send no header.
 
 ## 4. Register the verifier's domain
 

@@ -4,17 +4,17 @@ Source: https://docs.trustpin.cloud/sdk/kotlin-attestation. API reference: https
 
 ## Requirements
 
-Android API 25+, Kotlin 2.3.0+. `kotlin-sdk` set up in the app at the same version as `kotlin-attest` (7.1.0 or later). Key Attestation needs hardware-backed key attestation (emulators offer only software attestation, never accepted). Play Integrity needs Google Play on the device, and only when the policy asks for it.
+Android API 25+, Kotlin 2.3.0+. `kotlin-sdk` set up in the app at the same version as `kotlin-attest` (7.1.1 or later). Key Attestation needs hardware-backed key attestation (emulators offer only software attestation, never accepted). Play Integrity needs Google Play on the device, and only when the policy asks for it.
 
 ## Install
 
 ```kotlin
 dependencies {
-    implementation("cloud.trustpin:kotlin-sdk:7.1.0")
-    implementation("cloud.trustpin:kotlin-attest:7.1.0")
+    implementation("cloud.trustpin:kotlin-sdk:7.1.1")
+    implementation("cloud.trustpin:kotlin-attest:7.1.1")
     // The adapter for the app's client, if not already there:
-    implementation("cloud.trustpin:trustpin-okhttp:7.1.0")   // OkHttp, Retrofit
-    implementation("cloud.trustpin:trustpin-ktor:7.1.0")     // Ktor with the OkHttp engine
+    implementation("cloud.trustpin:trustpin-okhttp:7.1.1")   // OkHttp, Retrofit
+    implementation("cloud.trustpin:trustpin-ktor:7.1.1")     // Ktor with the OkHttp engine
 }
 ```
 
@@ -102,7 +102,7 @@ val config = TrustPinAttestConfiguration(
 )
 ```
 
-The user keeps the token in `~/.gradle/gradle.properties` (`trustpinDebugToken=...`). It is used only in debuggable builds, on emulators and on real devices.
+The user keeps the token in `~/.gradle/gradle.properties` (`trustpinDebugToken=...`). It is used only in debuggable builds, on emulators and on real devices. A debug token identifies the app by the package name it runs under, so a debug build with an `applicationIdSuffix` must be listed in the policy as its own package.
 
 ## Errors and state
 

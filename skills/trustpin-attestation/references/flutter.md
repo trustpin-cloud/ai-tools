@@ -4,14 +4,14 @@ Source: https://docs.trustpin.cloud/sdk/flutter-attestation. Package: https://pu
 
 ## Requirements
 
-Flutter 3.44.0+ (iOS and macOS through Swift Package Manager only). iOS 15+, macOS 13+, Android API 25+, Kotlin 2.3.0+. `trustpin_sdk` set up in the app at the same version as `trustpin_attest` (7.1.0 or later). The App Attest capability on the Runner targets for iOS and macOS. The package wraps the native modules, so their device requirements apply (`references/swift.md`, `references/kotlin.md`).
+Flutter 3.44.0+ (iOS and macOS through Swift Package Manager only). iOS 15+, macOS 13+, Android API 25+, Kotlin 2.3.0+. `trustpin_sdk` set up in the app at the same version as `trustpin_attest` (7.1.1 or later). The App Attest capability on the Runner targets for iOS and macOS. The package wraps the native modules, so their device requirements apply (`references/swift.md`, `references/kotlin.md`).
 
 ## Install
 
 ```yaml
 dependencies:
-  trustpin_sdk: ^7.1.0
-  trustpin_attest: ^7.1.0
+  trustpin_sdk: ^7.1.1
+  trustpin_attest: ^7.1.1
 ```
 
 ## Configure
@@ -61,6 +61,9 @@ import 'package:crypto/crypto.dart';
 
 final body = utf8.encode(jsonEncode(payload));
 final headers = {'Authorization': 'Bearer $session'};
+// With header binding, ask for this request's token first, then the assertion.
+headers.addAll(await TrustPinAttest.shared
+    .attestationHeaders(url, method: 'POST', headers: headers));
 headers.addAll(await TrustPinAttest.shared
     .assertionHeaders(Uint8List.fromList(sha256.convert(body).bytes)));
 await client.post(url, headers: headers, body: body);
