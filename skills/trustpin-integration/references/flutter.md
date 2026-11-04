@@ -12,7 +12,7 @@ If the project is below Flutter 3.44, stop and tell the user. Do not upgrade Flu
 
 ```yaml
 dependencies:
-  trustpin_sdk: ^7.1.0
+  trustpin_sdk: ^7.1.1
 ```
 
 Then `flutter pub get`. Confirm `minSdk 25` or higher in `android/app/build.gradle`.

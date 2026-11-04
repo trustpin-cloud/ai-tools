@@ -3,7 +3,7 @@ name: trustpin-cicd
 description: Set up, review, or troubleshoot CI/CD automation for TrustPin certificate pins with trustpin-cli. Covers scheduled pin refresh, automatic pinning when an AWS ACM certificate renews (EventBridge and Lambda), CodeBuild and CodePipeline jobs, GitHub Actions, GitLab CI, Azure DevOps, Jenkins, CircleCI, release gates, and embedded-configuration regeneration. Use whenever the user wants TrustPin pin rotation, pin refresh, or signing and publishing automated in a pipeline or on AWS, or asks about running trustpin-cli in CI. To add the SDK to an app, use trustpin-integration instead.
 license: TrustPin Binary License Agreement. See LICENSE
 metadata:
-  skill-version: "1.2.0"
+  skill-version: "1.2.1"
   verified-against: "trustpin-cli 7.0.0"
   docs: https://docs.trustpin.cloud/cli/devops-guide
 ---
