@@ -3,8 +3,8 @@ name: trustpin-attestation
 description: Add, review, or troubleshoot TrustPin app attestation, which proves to an API that requests come from the genuine app on a genuine device (Apple App Attest, Android Key Attestation, Google Play Integrity), in iOS, macOS, Android, Flutter, or React Native (bare or Expo) apps, and verify its tokens in the backend or at an API gateway. Use whenever the user mentions TrustPinAttestKit, kotlin-attest, trustpin_attest, @trustpin/react-native-attest, the TrustPin-Attestation or TrustPin-Assertion header, the TrustPin attestation verifier, an attestation policy, or asks for app attestation, App Attest, or Play Integrity with TrustPin. Covers adding the SDK module, token binding, assertions for sensitive operations, debug tokens, verifying tokens in an API, rolling out from monitor to enforce, and publishing the policy with trustpin-cli. For certificate pinning itself, use trustpin-integration.
 license: TrustPin Binary License Agreement. See LICENSE
 metadata:
-  skill-version: "1.2.0"
-  verified-against: "TrustPinAttestKit 7.1.0, kotlin-attest 7.1.0, trustpin_attest 7.1.0, @trustpin/react-native-attest 7.1.0, attest-verifier 1.0.0, trustpin-cli 7.0.0"
+  skill-version: "1.2.1"
+  verified-against: "TrustPinAttestKit 7.1.0, kotlin-attest 7.1.1, trustpin_attest 7.1.1, @trustpin/react-native-attest 7.1.1, attest-verifier 1.0.0, trustpin-cli 7.0.0"
   docs: https://docs.trustpin.cloud/attestation/overview
 ---
 

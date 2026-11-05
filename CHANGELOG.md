@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.1
+
+- `trustpin-attestation` targets the attestation verifier `trustpincloud/attest-verifier` 1.0.0 or later, and installs kotlin-attest, trustpin_attest and @trustpin/react-native-attest 7.1.1. The snippets for sensitive operations add the attestation header before asking for the assertion headers, so the assertion is bound to that request's session. On Android, a debug token identifies the app by the package name it runs under, so a debug build with an `applicationIdSuffix` needs its own entry in the policy.
+- `trustpin-integration` installs kotlin-sdk, trustpin-okhttp, trustpin-ktor and trustpin_sdk 7.1.1. The pinning API is unchanged.
+
+Verification for this release:
+
+| Platform | Packages | What was checked |
+|---|---|---|
+| Swift | TrustPinKit, TrustPinAttestKit, TrustPinKitAlamofire 7.1.0 | Unchanged since 1.2.0 |
+| Kotlin | kotlin-sdk, kotlin-attest, trustpin-okhttp, trustpin-ktor 7.1.1 | Changed snippets and API names checked against the 7.1.1 source; not recompiled |
+| Flutter | trustpin_sdk, trustpin_attest 7.1.1 | Changed snippets and API names checked against the 7.1.1 source; not re-analyzed |
+| React Native | @trustpin/react-native, @trustpin/react-native-attest 7.1.1 | Changed snippets and API names checked against the 7.1.1 source; not re-type-checked |
+| CLI | trustpin-cli 7.0.0 | Unchanged since 1.2.0 |
+
 ## 1.2.0
 
 - New skill `trustpin-attestation` (`/trustpin:trustpin-attestation`): adds, reviews, and troubleshoots TrustPin app attestation (Apple App Attest, Android Key Attestation, Google Play Integrity) on iOS, macOS, Android, Flutter, and React Native (bare and Expo), with token binding, assertions for sensitive operations, debug tokens for simulators and emulators, verifying tokens in the API or at a gateway, rolling out from monitor to enforce, and policy publishing with `trustpin-cli projects attestation`. It never handles the verifier's keys, secrets or debug tokens, and never publishes a policy without approval.

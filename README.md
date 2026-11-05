@@ -57,7 +57,7 @@ cp -r ai-tools/skills/trustpin-integration ai-tools/skills/trustpin-attestation 
 
 ## Verified against
 
-TrustPinKit 7.1.0, kotlin-sdk 7.1.0, trustpin_sdk 7.1.0, @trustpin/react-native 7.1.0, and their attestation packages TrustPinAttestKit, kotlin-attest, trustpin_attest and @trustpin/react-native-attest 7.1.0; attest-verifier 1.0.0; trustpin-cli 7.0.0. See `CHANGELOG.md` for what "verified" covers.
+TrustPinKit and TrustPinAttestKit 7.1.0; kotlin-sdk, trustpin_sdk, @trustpin/react-native and their attestation packages kotlin-attest, trustpin_attest and @trustpin/react-native-attest 7.1.1; attest-verifier 1.0.0; trustpin-cli 7.0.0. See `CHANGELOG.md` for what "verified" covers.
 
 Documentation: https://docs.trustpin.cloud. Technical support: support@trustpin.cloud. Other inquiries: contact@trustpin.cloud. Issues and corrections are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: see [SECURITY.md](SECURITY.md).
 

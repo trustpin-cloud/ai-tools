@@ -10,10 +10,10 @@ Android API 25+, Kotlin 2.3.0+, Java 11+. The Maven Central artifact is an Andro
 
 ```kotlin
 dependencies {
-    implementation("cloud.trustpin:kotlin-sdk:7.1.0")
+    implementation("cloud.trustpin:kotlin-sdk:7.1.1")
     // Optional adapters. Add the one matching the app's client:
-    implementation("cloud.trustpin:trustpin-okhttp:7.1.0")  // OkHttp, Retrofit
-    implementation("cloud.trustpin:trustpin-ktor:7.1.0")    // Ktor with the OkHttp engine
+    implementation("cloud.trustpin:trustpin-okhttp:7.1.1")  // OkHttp, Retrofit
+    implementation("cloud.trustpin:trustpin-ktor:7.1.1")    // Ktor with the OkHttp engine
 }
 ```
 

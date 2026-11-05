@@ -3,8 +3,8 @@ name: trustpin-integration
 description: Integrate, review, or automate TrustPin certificate pinning in an iOS, macOS, Android, Flutter, or React Native (bare or Expo) app. Use this skill whenever the user mentions TrustPin, TrustPinKit, trustpin_sdk, @trustpin/react-native, cloud.trustpin, trustpin-cli, TrustPin-Info.plist, or trustpin.json, and also when they ask to add certificate pinning, SSL pinning, public key pinning, or remotely updatable pins to a mobile app and TrustPin is in the project or is the chosen tool. Covers first-time SDK integration, wiring pinning into an existing HTTP client (URLSession, Alamofire, OkHttp, Retrofit, Ktor, HttpsURLConnection, Dio, package:http, fetch), auditing an existing TrustPin integration, diagnosing pinning errors, and pin rotation or CI automation with the TrustPin CLI. For app attestation (the TrustPin-Attestation header, App Attest, Play Integrity), use trustpin-attestation instead.
 license: TrustPin Binary License Agreement. See LICENSE
 metadata:
-  skill-version: "1.2.0"
-  verified-against: "TrustPinKit 7.1.0, kotlin-sdk 7.1.0, trustpin_sdk 7.1.0, @trustpin/react-native 7.1.0, trustpin-cli 7.0.0"
+  skill-version: "1.2.1"
+  verified-against: "TrustPinKit 7.1.0, kotlin-sdk 7.1.1, trustpin_sdk 7.1.1, @trustpin/react-native 7.1.1, trustpin-cli 7.0.0"
   docs: https://docs.trustpin.cloud
 ---
 

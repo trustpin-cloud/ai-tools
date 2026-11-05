@@ -80,7 +80,7 @@ await TrustPinAttest.shared.setupWithNativeBundle(
 );
 ```
 
-Run with `flutter run --dart-define=TRUSTPIN_DEBUG_TOKEN=<token>`. Used on the iOS simulator and in debuggable Android builds, never sent in release builds. Never commit the token (not in `launch.json` or a committed `--dart-define-from-file`).
+Run with `flutter run --dart-define=TRUSTPIN_DEBUG_TOKEN=<token>`. Used on the iOS simulator and in debuggable Android builds, never sent in release builds. Never commit the token (not in `launch.json` or a committed `--dart-define-from-file`). On Android, a debug token identifies the app by the package name it runs under, so a debug build with an `applicationIdSuffix` must be listed in the policy as its own package.
 
 ## Errors and state
 
